@@ -202,6 +202,7 @@
   .detail .d-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
   .detail .d-item .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;}
   .detail .d-item .value{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--ink);margin-top:2px;}
+  .value-pct{font-size:12px;font-weight:500;color:var(--ink-faint);}
 
   #detailRoster{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
   .roster-title{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
@@ -642,7 +643,7 @@ function showDetail(key){
     const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
 
     let gridHtml =
-      item('Setoran masuk', d.setoran) +
+      item('Setoran masuk', setoranValue(d)) +
       item('Okupansi', occupancy.toFixed(1) + '%');
     document.getElementById('detailGrid').innerHTML = gridHtml;
 
@@ -693,7 +694,7 @@ function showDetail(key){
   } else if(currentView === 'per_car'){
     document.getElementById('detailPyramid').style.display = 'none';
     let gridHtml =
-      item('Setoran masuk', d.setoran) +
+      item('Setoran masuk', setoranValue(d)) +
       item('Mobil aktif (kontrak)', d.active) +
       item('Total pendapatan', 'Rp' + d.revenue.toLocaleString('id-ID')) +
       item('Pendapatan / mobil aktif', 'Rp' + d.per_car.toLocaleString('id-ID'));
@@ -727,7 +728,7 @@ function showDetail(key){
   } else {
     document.getElementById('detailPyramid').style.display = 'none';
     let gridHtml =
-      item('Setoran masuk', d.setoran) +
+      item('Setoran masuk', setoranValue(d)) +
       item('Mobil aktif (kontrak)', d.active) +
       item('Total pendapatan', 'Rp' + d.revenue.toLocaleString('id-ID')) +
       item('Pendapatan / mobil aktif', 'Rp' + d.per_car.toLocaleString('id-ID'));
@@ -738,6 +739,10 @@ function showDetail(key){
   }
 
   detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function setoranValue(d){
+  const pct = d.active > 0 ? (d.setoran / d.active * 100) : 0;
+  return d.setoran + ' <span class="value-pct">(' + pct.toFixed(0) + '%)</span>';
 }
 function item(label, value){
   return '<div class="d-item"><div class="label">'+label+'</div><div class="value">'+value+'</div></div>';
