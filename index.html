@@ -115,17 +115,56 @@
   .section-content.open{display:block;}
   .section-empty{font-size:13px;color:var(--ink-faint);padding:6px 0;}
 
+  .pyramid{margin:1rem 0;}
+  .pyramid-top{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  }
+  .pyramid-box{
+    border-radius:var(--radius);padding:12px 14px;text-align:center;
+    border:1px solid var(--line);
+  }
+  .pyramid-box .p-label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+  .pyramid-box .p-value{font-family:var(--font-mono);font-size:20px;font-weight:700;}
+  .pb-active{background:#E3F5E9;}
+  .pb-active .p-value{color:#1E7A45;}
+  .pb-bengkel{background:#FCEBEB;}
+  .pb-bengkel .p-value{color:#B03A3A;}
+  .pb-inaktif{background:#FDF3D9;}
+  .pb-inaktif .p-value{color:#9A7B0A;}
+  .pyramid-connector{
+    width:2px;height:16px;background:var(--line);margin:0 auto;
+  }
+  .pyramid-total{
+    border-radius:var(--radius);padding:14px;text-align:center;
+    background:var(--accent-strong);
+  }
+  .pyramid-total .p-label{font-size:11px;color:var(--bg);opacity:0.85;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+  .pyramid-total .p-value{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--bg);}
+
+  @media (max-width:480px){
+    .pyramid-top{grid-template-columns:1fr 1fr;}
+    .pb-inaktif{grid-column:1 / 3;}
+    .pyramid-box .p-value{font-size:17px;}
+  }
+
   .legend{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;font-size:12.5px;color:var(--ink-soft);}
   .legend .chips{display:flex;gap:2px;}
   .legend .chip{width:18px;height:14px;border-radius:2px;}
 
   .months{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    display:grid;
+    grid-template-rows:repeat(2, auto);
+    grid-auto-flow:column;
+    grid-auto-columns:calc(50% - 8px);
     gap:16px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:thin;
+    padding-bottom:4px;
   }
   .month-card{
     background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:14px;
+    padding:14px;overflow:hidden;scroll-snap-align:start;
   }
   .month-title{font-family:var(--font-display);font-size:16px;color:var(--accent-strong);margin-bottom:10px;}
   .daynames{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
@@ -135,13 +174,15 @@
     aspect-ratio:1;border-radius:5px;display:flex;flex-direction:column;
     align-items:center;justify-content:center;cursor:default;font-size:10px;
     border:1px solid transparent;transition:transform 0.1s;touch-action:manipulation;
+    overflow:hidden;min-width:0;
   }
   .day.has-data{cursor:pointer;}
   .day.has-data:hover{transform:scale(1.08);z-index:2;}
   .day.has-data:active{transform:scale(0.95);}
   .day.empty{background:var(--bg);}
-  .day-num{font-size:9px;opacity:0.8;}
-  .day-val{font-size:12px;font-weight:600;margin-top:1px;}
+  .day-num{font-size:9px;opacity:0.8;white-space:nowrap;}
+  .day-val{font-size:12px;font-weight:600;margin-top:1px;white-space:nowrap;}
+  .day-sub{font-size:11px;opacity:0.8;margin-top:1px;white-space:nowrap;}
   .day.nodata{background:transparent;border:1px dashed var(--line);color:var(--ink-faint);}
 
   .detail{
@@ -209,6 +250,7 @@
     .sub{font-size:13.5px;}
     .day-num{font-size:8px;}
     .day-val{font-size:11px;}
+    .day-sub{font-size:9px;}
     .stat .value{font-size:17px;}
     .month-card{padding:10px;}
 
@@ -263,6 +305,7 @@
   <div class="detail" id="detail">
     <div class="d-title" id="detailTitle"></div>
     <div class="d-grid" id="detailGrid"></div>
+    <div id="detailPyramid" style="display:none;"></div>
     <div id="detailRoster" style="display:none;"></div>
   </div>
 
@@ -270,7 +313,7 @@
 </div>
 
 <script>
-const DATA = {"2026-04-01":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-02":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-03":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-04":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-05":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-06":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-07":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-08":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-09":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-10":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-11":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-12":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-13":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-14":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-15":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-16":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-17":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-18":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-19":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-20":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-21":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-22":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-23":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":9,"occupancy":66.7},"2026-04-24":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-04-25":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-26":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-27":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-28":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-29":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-30":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-01":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-02":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-03":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-04":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-05":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-06":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-07":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":14,"occupancy":57.1},"2026-05-08":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-09":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-10":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-11":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-12":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-13":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-14":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-15":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-16":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":18,"occupancy":44.4},"2026-05-17":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-18":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-19":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-20":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-21":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-22":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-23":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-24":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":18,"occupancy":38.9},"2026-05-25":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":20,"occupancy":35.0},"2026-05-26":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":20,"occupancy":35.0},"2026-05-27":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":20,"occupancy":35.0},"2026-05-28":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":20,"occupancy":35.0},"2026-05-29":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":24,"occupancy":29.2},"2026-05-30":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":24,"occupancy":25.0},"2026-05-31":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":24,"occupancy":25.0},"2026-06-01":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":24,"occupancy":25.0},"2026-06-02":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":24,"occupancy":20.8},"2026-06-03":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":24,"occupancy":20.8},"2026-06-04":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":24,"occupancy":20.8},"2026-06-05":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":24,"occupancy":25.0},"2026-06-06":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":24,"occupancy":25.0},"2026-06-07":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":24,"occupancy":29.2},"2026-06-08":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":24,"occupancy":33.3},"2026-06-09":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":24,"occupancy":33.3},"2026-06-10":{"setoran":9,"active":9,"revenue":3190000,"per_car":354444,"total_fleet":24,"occupancy":37.5},"2026-06-11":{"setoran":12,"active":12,"revenue":4300000,"per_car":358333,"total_fleet":24,"occupancy":50.0},"2026-06-12":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":24,"occupancy":54.2},"2026-06-13":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":24,"occupancy":54.2},"2026-06-14":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":24,"occupancy":50.0},"2026-06-15":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":24,"occupancy":50.0},"2026-06-16":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":24,"occupancy":50.0},"2026-06-17":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":24,"occupancy":54.2},"2026-06-18":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":24,"occupancy":54.2},"2026-06-19":{"setoran":13,"active":14,"revenue":4570000,"per_car":326429,"total_fleet":24,"occupancy":58.3},"2026-06-20":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":24,"occupancy":54.2},"2026-06-21":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":24,"occupancy":54.2},"2026-06-22":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-23":{"setoran":13,"active":13,"revenue":4470000,"per_car":343846,"total_fleet":24,"occupancy":54.2},"2026-06-24":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-25":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-26":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-27":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-28":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-29":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-30":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-01":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-02":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-03":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-04":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-05":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-06":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-07":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-08":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-09":{"setoran":17,"active":17,"revenue":5690000,"per_car":334706,"total_fleet":24,"occupancy":70.8},"2026-07-10":{"setoran":16,"active":17,"revenue":5340000,"per_car":314118,"total_fleet":24,"occupancy":70.8},"2026-07-11":{"setoran":14,"active":17,"revenue":4720000,"per_car":277647,"total_fleet":24,"occupancy":70.8},"2026-07-12":{"setoran":13,"active":17,"revenue":4350000,"per_car":255882,"total_fleet":24,"occupancy":70.8},"2026-07-13":{"setoran":12,"active":17,"revenue":3980000,"per_car":234118,"total_fleet":24,"occupancy":70.8},"2026-07-14":{"setoran":10,"active":17,"revenue":3380000,"per_car":198824,"total_fleet":24,"occupancy":70.8},"2026-07-15":{"setoran":10,"active":17,"revenue":3380000,"per_car":198824,"total_fleet":24,"occupancy":70.8},"2026-07-16":{"setoran":6,"active":17,"revenue":1940000,"per_car":114118,"total_fleet":24,"occupancy":70.8},"2026-07-17":{"setoran":6,"active":17,"revenue":1940000,"per_car":114118,"total_fleet":24,"occupancy":70.8},"2026-07-18":{"setoran":5,"active":16,"revenue":1590000,"per_car":99375,"total_fleet":24,"occupancy":66.7},"2026-07-19":{"setoran":4,"active":16,"revenue":1240000,"per_car":77500,"total_fleet":24,"occupancy":66.7},"2026-07-20":{"setoran":0,"active":15,"revenue":0,"per_car":0,"total_fleet":24,"occupancy":62.5}};
+const DATA = {"2026-04-01":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-02":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-03":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-04":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-05":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-06":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-07":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-08":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-09":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-10":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-11":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-12":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-13":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-14":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-15":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-16":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-17":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-18":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-19":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-20":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-21":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-22":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-23":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":9,"occupancy":66.7},"2026-04-24":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-04-25":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-26":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-27":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-28":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-29":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-30":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-01":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-02":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-03":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-04":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-05":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-06":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-07":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-08":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-09":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-10":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-11":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-12":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-13":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-14":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-15":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-16":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-17":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-18":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-19":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-20":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-21":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-22":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-23":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-24":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-25":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":11,"occupancy":63.6},"2026-05-26":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":11,"occupancy":63.6},"2026-05-27":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":11,"occupancy":63.6},"2026-05-28":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":11,"occupancy":63.6},"2026-05-29":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":15,"occupancy":46.7},"2026-05-30":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":15,"occupancy":40.0},"2026-05-31":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":15,"occupancy":40.0},"2026-06-01":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":15,"occupancy":40.0},"2026-06-02":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":15,"occupancy":33.3},"2026-06-03":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":15,"occupancy":33.3},"2026-06-04":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":15,"occupancy":33.3},"2026-06-05":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":15,"occupancy":40.0},"2026-06-06":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":15,"occupancy":40.0},"2026-06-07":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":15,"occupancy":46.7},"2026-06-08":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":15,"occupancy":53.3},"2026-06-09":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":15,"occupancy":53.3},"2026-06-10":{"setoran":9,"active":9,"revenue":3190000,"per_car":354444,"total_fleet":15,"occupancy":60.0},"2026-06-11":{"setoran":12,"active":12,"revenue":4300000,"per_car":358333,"total_fleet":15,"occupancy":80.0},"2026-06-12":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":15,"occupancy":86.7},"2026-06-13":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":15,"occupancy":86.7},"2026-06-14":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":15,"occupancy":80.0},"2026-06-15":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":19,"occupancy":63.2},"2026-06-16":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":19,"occupancy":63.2},"2026-06-17":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":19,"occupancy":68.4},"2026-06-18":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":19,"occupancy":68.4},"2026-06-19":{"setoran":13,"active":14,"revenue":4570000,"per_car":326429,"total_fleet":19,"occupancy":73.7},"2026-06-20":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":24,"occupancy":54.2},"2026-06-21":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":24,"occupancy":54.2},"2026-06-22":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-23":{"setoran":13,"active":13,"revenue":4470000,"per_car":343846,"total_fleet":24,"occupancy":54.2},"2026-06-24":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-25":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-26":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":24,"occupancy":58.3},"2026-06-27":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-28":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-29":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-30":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-01":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-02":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-03":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-04":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-05":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-06":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-07":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-08":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-09":{"setoran":17,"active":17,"revenue":5690000,"per_car":334706,"total_fleet":24,"occupancy":70.8},"2026-07-10":{"setoran":16,"active":17,"revenue":5340000,"per_car":314118,"total_fleet":24,"occupancy":70.8},"2026-07-11":{"setoran":14,"active":17,"revenue":4720000,"per_car":277647,"total_fleet":24,"occupancy":70.8},"2026-07-12":{"setoran":13,"active":17,"revenue":4350000,"per_car":255882,"total_fleet":24,"occupancy":70.8},"2026-07-13":{"setoran":12,"active":17,"revenue":3980000,"per_car":234118,"total_fleet":24,"occupancy":70.8},"2026-07-14":{"setoran":10,"active":17,"revenue":3380000,"per_car":198824,"total_fleet":24,"occupancy":70.8},"2026-07-15":{"setoran":10,"active":17,"revenue":3380000,"per_car":198824,"total_fleet":24,"occupancy":70.8},"2026-07-16":{"setoran":6,"active":17,"revenue":1940000,"per_car":114118,"total_fleet":24,"occupancy":70.8},"2026-07-17":{"setoran":6,"active":17,"revenue":1940000,"per_car":114118,"total_fleet":24,"occupancy":70.8},"2026-07-18":{"setoran":5,"active":16,"revenue":1590000,"per_car":99375,"total_fleet":24,"occupancy":66.7},"2026-07-19":{"setoran":4,"active":16,"revenue":1240000,"per_car":77500,"total_fleet":24,"occupancy":66.7},"2026-07-20":{"setoran":0,"active":15,"revenue":0,"per_car":0,"total_fleet":24,"occupancy":62.5}};
 
 const ACTIVE_ADJ_NOTE_MAX_DATE = "2026-07-17";
 const RAMP = ['#E6F1FB','#B5D4F4','#85B7EB','#378ADD','#185FA5','#0C447C'];
@@ -296,15 +339,15 @@ const MASTER_CARS = [
   {plat:"B 1143 PNV", vehicle:"Wuling Cloud", issued:"2025-10-22"},
   {plat:"B 1141 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
   {plat:"B 1140 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
-  {plat:"B 1184 PNU", vehicle:"Vf E34", issued:"2026-05-07"},
-  {plat:"B 1185 PNU", vehicle:"Vf E34", issued:"2026-05-07", note:"bengkel_since_issued"},
-  {plat:"B 1182 PNU", vehicle:"Vf E34", issued:"2026-05-07"},
-  {plat:"B 1183 PNU", vehicle:"Vf E34", issued:"2026-05-07", note:"bengkel_since_issued"},
-  {plat:"B 1613 PNU", vehicle:"Vf E34", issued:"2026-05-07", note:"bengkel_since_issued"},
-  {plat:"B 2413 PYD", vehicle:"Stargazer", issued:"2026-05-08"},
-  {plat:"B 2398 PYD", vehicle:"Stargazer", issued:"2026-05-08"},
-  {plat:"B 2396 PYD", vehicle:"Stargazer", issued:"2026-05-08"},
-  {plat:"B 2526 PYD", vehicle:"Stargazer", issued:"2026-05-08"},
+  {plat:"B 1184 PNU", vehicle:"Vf E34", issued:"2026-06-20"},
+  {plat:"B 1185 PNU", vehicle:"Vf E34", issued:"2026-06-20", note:"bengkel_since_issued"},
+  {plat:"B 1182 PNU", vehicle:"Vf E34", issued:"2026-06-20"},
+  {plat:"B 1183 PNU", vehicle:"Vf E34", issued:"2026-06-20", note:"bengkel_since_issued"},
+  {plat:"B 1613 PNU", vehicle:"Vf E34", issued:"2026-06-20", note:"bengkel_since_issued"},
+  {plat:"B 2413 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
+  {plat:"B 2398 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
+  {plat:"B 2396 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
+  {plat:"B 2526 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
   {plat:"B 2172 PNP", vehicle:"Wuling Cloud Pro", issued:"2026-05-29"}
 ];
 
@@ -459,7 +502,11 @@ function renderCalendar(){
         cell.className = 'day has-data';
         cell.style.background = RAMP[idx];
         cell.style.color = textColorFor(idx);
-        cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div>';
+        if(currentView === 'active'){
+          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div><div class="day-sub">'+DATA[key].active+' car</div>';
+        } else {
+          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div>';
+        }
         cell.addEventListener('mouseenter', ()=>showTooltip(key));
         cell.addEventListener('mousemove', (e)=>positionTooltip(e));
         cell.addEventListener('mouseleave', hideTooltip);
@@ -536,11 +583,21 @@ function showDetail(key){
 
     let gridHtml =
       item('Setoran masuk', d.setoran) +
-      item('Okupansi', occupancy.toFixed(1) + '%') +
-      item('Mobil aktif (kontrak)', d.active) +
-      item('Mobil bengkel', allBengkelVehicles.length) +
-      item('Total mobil keseluruhan', totalFleet);
+      item('Okupansi', occupancy.toFixed(1) + '%');
     document.getElementById('detailGrid').innerHTML = gridHtml;
+
+    const pyramidBox = document.getElementById('detailPyramid');
+    pyramidBox.innerHTML =
+      '<div class="pyramid">' +
+        '<div class="pyramid-top">' +
+          '<div class="pyramid-box pb-active"><div class="p-label">Mobil Aktif</div><div class="p-value">'+normalVehicles.length+'</div></div>' +
+          '<div class="pyramid-box pb-bengkel"><div class="p-label">Mobil Bengkel</div><div class="p-value">'+allBengkelVehicles.length+'</div></div>' +
+          '<div class="pyramid-box pb-inaktif"><div class="p-label">Mobil Inaktif</div><div class="p-value">'+inactiveVehicles.length+'</div></div>' +
+        '</div>' +
+        '<div class="pyramid-connector"></div>' +
+        '<div class="pyramid-total"><div class="p-label">Total Mobil Keseluruhan</div><div class="p-value">'+totalFleet+'</div></div>' +
+      '</div>';
+    pyramidBox.style.display = 'block';
 
     function rowHtml(v, i){
       return '<div class="roster-row"><span class="roster-num">'+(i+1)+'</span><span class="roster-plat">'+v.plat+'</span><span class="roster-vehicle">'+v.vehicle+'</span><span class="roster-name">'+v.name+'</span></div>';
@@ -574,6 +631,7 @@ function showDetail(key){
       });
     });
   } else if(currentView === 'per_car'){
+    document.getElementById('detailPyramid').style.display = 'none';
     let gridHtml =
       item('Setoran masuk', d.setoran) +
       item('Mobil aktif (kontrak)', d.active) +
@@ -607,6 +665,7 @@ function showDetail(key){
         : '<div class="roster-title" style="margin-top:16px;">Tidak ada data transaksi tercatat untuk tanggal ini</div>');
     rosterBox.style.display = 'block';
   } else {
+    document.getElementById('detailPyramid').style.display = 'none';
     let gridHtml =
       item('Setoran masuk', d.setoran) +
       item('Mobil aktif (kontrak)', d.active) +
