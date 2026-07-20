@@ -97,6 +97,24 @@
   .day-tooltip .tip-row span{opacity:0.85;}
   .day-tooltip .tip-row b{font-family:var(--font-mono);}
 
+  .roster-section{margin-top:14px;}
+  .roster-section:first-child{margin-top:0;}
+  .section-toggle{
+    display:flex;align-items:center;justify-content:space-between;width:100%;
+    border:none;background:transparent;padding:4px 0;cursor:pointer;
+    font-family:var(--font-sans);touch-action:manipulation;
+  }
+  .section-toggle-title{
+    font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;
+  }
+  .section-toggle-arrow{
+    color:var(--ink-faint);font-size:12px;transition:transform 0.15s;
+  }
+  .section-toggle.open .section-toggle-arrow{transform:rotate(180deg);}
+  .section-content{display:none;margin-top:6px;}
+  .section-content.open{display:block;}
+  .section-empty{font-size:13px;color:var(--ink-faint);padding:6px 0;}
+
   .legend{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;font-size:12.5px;color:var(--ink-soft);}
   .legend .chips{display:flex;gap:2px;}
   .legend .chip{width:18px;height:14px;border-radius:2px;}
@@ -124,7 +142,6 @@
   .day.empty{background:var(--bg);}
   .day-num{font-size:9px;opacity:0.8;}
   .day-val{font-size:12px;font-weight:600;margin-top:1px;}
-  .day-sub{font-size:8px;opacity:0.75;margin-top:0px;}
   .day.nodata{background:transparent;border:1px dashed var(--line);color:var(--ink-faint);}
 
   .detail{
@@ -192,9 +209,25 @@
     .sub{font-size:13.5px;}
     .day-num{font-size:8px;}
     .day-val{font-size:11px;}
-    .day-sub{font-size:7px;}
     .stat .value{font-size:17px;}
     .month-card{padding:10px;}
+
+    .months{
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      gap:0;
+      margin:0 -1rem;
+      padding:0 1rem;
+      scrollbar-width:none;
+    }
+    .months::-webkit-scrollbar{display:none;}
+    .month-card{
+      flex:0 0 100%;
+      scroll-snap-align:center;
+      scroll-snap-stop:always;
+    }
   }
 </style>
 </head>
@@ -426,12 +459,7 @@ function renderCalendar(){
         cell.className = 'day has-data';
         cell.style.background = RAMP[idx];
         cell.style.color = textColorFor(idx);
-        if(currentView === 'active'){
-          const activeCount = DATA[key].active;
-          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div><div class="day-sub">'+activeCount+' mobil</div>';
-        } else {
-          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div>';
-        }
+        cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div>';
         cell.addEventListener('mouseenter', ()=>showTooltip(key));
         cell.addEventListener('mousemove', (e)=>positionTooltip(e));
         cell.addEventListener('mouseleave', hideTooltip);
@@ -504,11 +532,13 @@ function showDetail(key){
 
     const totalFleet = issuedCars.length;
     const occupancy = totalFleet > 0 ? (normalVehicles.length / totalFleet * 100) : 0;
+    const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
 
     let gridHtml =
       item('Setoran masuk', d.setoran) +
       item('Okupansi', occupancy.toFixed(1) + '%') +
       item('Mobil aktif (kontrak)', d.active) +
+      item('Mobil bengkel', allBengkelVehicles.length) +
       item('Total mobil keseluruhan', totalFleet);
     document.getElementById('detailGrid').innerHTML = gridHtml;
 
@@ -518,17 +548,31 @@ function showDetail(key){
     function rowHtmlNoName(v, i){
       return '<div class="roster-row" style="grid-template-columns:22px 110px 1fr;"><span class="roster-num">'+(i+1)+'</span><span class="roster-plat">'+v.plat+'</span><span class="roster-vehicle">'+v.vehicle+'</span></div>';
     }
+    function buildSection(id, title, count, rowsHtml){
+      return '<div class="roster-section">' +
+        '<button class="section-toggle" data-target="'+id+'">' +
+          '<span class="section-toggle-title">'+title+' ('+count+')</span>' +
+          '<span class="section-toggle-arrow">▾</span>' +
+        '</button>' +
+        '<div class="section-content" id="'+id+'">' + (rowsHtml || '<div class="section-empty">Tidak ada.</div>') + '</div>' +
+      '</div>';
+    }
 
-    let html = '<div class="roster-title">Mobil aktif tanggal ini ('+normalVehicles.length+')</div>' + normalVehicles.map(rowHtml).join('');
-    const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
-    if(allBengkelVehicles.length > 0){
-      html += '<div class="roster-title" style="margin-top:14px;">Mobil inaktif — bengkel ('+allBengkelVehicles.length+')</div>' + allBengkelVehicles.map((v,i)=>rowHtmlNoName(v, i)).join('');
-    }
-    if(inactiveVehicles.length > 0){
-      html += '<div class="roster-title" style="margin-top:14px;">Mobil inaktif — non bengkel ('+inactiveVehicles.length+')</div>' + inactiveVehicles.map((v,i)=>rowHtmlNoName(v, i)).join('');
-    }
+    let html = '';
+    html += buildSection('sec-aktif', 'Mobil aktif tanggal ini', normalVehicles.length, normalVehicles.map(rowHtml).join(''));
+    html += buildSection('sec-bengkel', 'Mobil inaktif — bengkel', allBengkelVehicles.length, allBengkelVehicles.map((v,i)=>rowHtmlNoName(v, i)).join(''));
+    html += buildSection('sec-inaktif', 'Mobil inaktif — non bengkel', inactiveVehicles.length, inactiveVehicles.map((v,i)=>rowHtmlNoName(v, i)).join(''));
+
     rosterBox.innerHTML = html;
     rosterBox.style.display = 'block';
+
+    rosterBox.querySelectorAll('.section-toggle').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const content = document.getElementById(btn.dataset.target);
+        const isOpen = content.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+      });
+    });
   } else if(currentView === 'per_car'){
     let gridHtml =
       item('Setoran masuk', d.setoran) +
