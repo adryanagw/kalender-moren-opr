@@ -115,7 +115,7 @@
     font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;
   }
   .section-toggle-arrow{
-    color:var(--ink-faint);font-size:12px;transition:transform 0.15s;
+    color:var(--ink-faint);font-size:30px;line-height:1;transition:transform 0.15s;
   }
   .section-toggle.open .section-toggle-arrow{transform:rotate(180deg);}
   .section-content{display:none;margin-top:6px;}
@@ -624,7 +624,7 @@ function renderCalendar(){
           positionTooltip(e);
           clearTimeout(window._tooltipHideTimer);
           window._tooltipHideTimer = setTimeout(hideTooltip, 3000);
-          showDetail(key);
+          showDetail(key, {scroll:true});
         });
       } else {
         cell.className = 'day nodata';
@@ -663,15 +663,16 @@ function hideTooltip(){
   document.getElementById('dayTooltip').style.display = 'none';
 }
 
-function showDetail(key){
+function showDetail(key, opts){
+  const shouldScroll = opts && opts.scroll;
   const d = DATA[key];
   if(!d) return;
   lastShownKey = key;
   const detail = document.getElementById('detail');
   detail.classList.add('show');
   const dateObj = new Date(key+'T00:00:00');
-  const opts = { day:'numeric', month:'long', year:'numeric' };
-  document.getElementById('detailTitle').textContent = dateObj.toLocaleDateString('id-ID', opts);
+  const dateOpts = { day:'numeric', month:'long', year:'numeric' };
+  document.getElementById('detailTitle').textContent = dateObj.toLocaleDateString('id-ID', dateOpts);
 
   const rosterBox = document.getElementById('detailRoster');
 
@@ -775,7 +776,9 @@ function showDetail(key){
     rosterBox.innerHTML = '';
   }
 
-  detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+  if(shouldScroll){
+    detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
 }
 function setoranValue(d){
   const pct = d.active > 0 ? (d.setoran / d.active * 100) : 0;
