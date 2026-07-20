@@ -55,6 +55,10 @@
   }
   .sub{color:var(--ink-soft);font-size:14.5px;max-width:640px;line-height:1.55;}
 
+  .swipe-hint{
+    display:none;
+  }
+
   .controls{
     display:flex;gap:12px;flex-wrap:wrap;margin:1.5rem 0 1.25rem;align-items:center;
   }
@@ -254,6 +258,19 @@
     .stat .value{font-size:17px;}
     .month-card{padding:10px;}
 
+    .swipe-hint{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      color:var(--ink-faint);font-size:12.5px;margin-bottom:10px;
+    }
+    .swipe-hint-icon{
+      width:30px;height:16px;color:var(--accent);
+      animation:swipeHintMove 1.6s ease-in-out infinite;
+    }
+    @keyframes swipeHintMove{
+      0%, 100%{ transform:translateX(-4px); opacity:0.55; }
+      50%{ transform:translateX(4px); opacity:1; }
+    }
+
     .months{
       display:flex;
       overflow-x:auto;
@@ -280,7 +297,6 @@
   <header>
     <div class="eyebrow">GO MOREN — Rekap Sewa Supir</div>
     <h1>Kalender operasional armada</h1>
-    <p class="sub">April – Juli 2026. Pilih tampilan untuk melihat jumlah mobil setor, mobil aktif kontrak, mobil aktif setelah dikurangi bengkel, atau pendapatan per mobil aktif setiap harinya. Klik tanggal untuk rincian.</p>
   </header>
 
   <div class="controls">
@@ -297,6 +313,15 @@
     <span id="legendLabelLow">Sedikit</span>
     <div class="chips" id="legendChips"></div>
     <span id="legendLabelHigh">Banyak</span>
+  </div>
+
+  <div class="swipe-hint">
+    <svg class="swipe-hint-icon" viewBox="0 0 60 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 16h40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M40 8l10 8-10 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M20 8l-10 8 10 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <span>Geser untuk ganti bulan</span>
   </div>
 
   <div class="months" id="months"></div>
