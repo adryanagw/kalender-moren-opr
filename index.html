@@ -58,6 +58,9 @@
   .swipe-hint{
     display:none;
   }
+  .tap-hint{
+    display:none;
+  }
 
   .controls{
     display:flex;gap:12px;flex-wrap:wrap;margin:1.5rem 0 1.25rem;align-items:center;
@@ -190,11 +193,12 @@
   .day.nodata{background:transparent;border:1px dashed var(--line);color:var(--ink-faint);}
 
   .detail{
-    margin-top:1.5rem;background:var(--panel);border:1px solid var(--line);
+    margin-top:1.5rem;background:var(--bg);border:2px solid var(--line);
     border-radius:var(--radius);padding:1rem 1.25rem;display:none;
+    box-shadow:0 12px 32px rgba(4,52,44,0.14), 0 4px 10px rgba(4,52,44,0.08);
   }
   .detail.show{display:block;}
-  .detail .d-title{font-family:var(--font-display);font-size:17px;color:var(--accent-strong);margin-bottom:10px;}
+  .detail .d-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--accent-strong);margin-bottom:10px;}
   .detail .d-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
   .detail .d-item .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;}
   .detail .d-item .value{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--ink);margin-top:2px;}
@@ -271,6 +275,19 @@
       50%{ transform:translateX(4px); opacity:1; }
     }
 
+    .tap-hint{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      color:var(--ink-faint);font-size:12.5px;margin:14px 0 4px;
+    }
+    .tap-hint-icon{
+      width:20px;height:20px;color:var(--accent);
+      animation:tapHintPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes tapHintPulse{
+      0%, 100%{ transform:scale(0.85); opacity:0.6; }
+      50%{ transform:scale(1.05); opacity:1; }
+    }
+
     .months{
       display:flex;
       overflow-x:auto;
@@ -325,6 +342,14 @@
   </div>
 
   <div class="months" id="months"></div>
+
+  <div class="tap-hint">
+    <svg class="tap-hint-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="6" fill="currentColor"/>
+      <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="2" fill="none" opacity="0.5"/>
+    </svg>
+    <span>Tekan tanggal untuk detail</span>
+  </div>
 
   <div id="dayTooltip" class="day-tooltip"></div>
 
