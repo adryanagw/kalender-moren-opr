@@ -158,6 +158,20 @@
   .legend .chips{display:flex;gap:2px;}
   .legend .chip{width:18px;height:14px;border-radius:2px;}
 
+  .occ-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;font-size:13px;color:var(--ink-soft);}
+  .switch{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0;}
+  .switch input{opacity:0;width:0;height:0;}
+  .switch-slider{
+    position:absolute;cursor:pointer;inset:0;background:var(--line);
+    border-radius:999px;transition:background 0.15s;
+  }
+  .switch-slider::before{
+    content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;
+    background:var(--panel);border-radius:50%;transition:transform 0.15s;
+  }
+  .switch input:checked + .switch-slider{background:var(--accent);}
+  .switch input:checked + .switch-slider::before{transform:translateX(16px);}
+
   .months{
     display:grid;
     grid-template-rows:repeat(2, auto);
@@ -333,6 +347,14 @@
     <span id="legendLabelHigh">Banyak</span>
   </div>
 
+  <div class="occ-toggle-row">
+    <label class="switch">
+      <input type="checkbox" id="bengkelToggle" checked>
+      <span class="switch-slider"></span>
+    </label>
+    <span class="occ-toggle-label">Okupansi sertakan mobil rusak (bengkel)</span>
+  </div>
+
   <div class="swipe-hint">
     <svg class="swipe-hint-icon" viewBox="0 0 60 32" xmlns="http://www.w3.org/2000/svg">
       <path d="M6 16h40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
@@ -441,6 +463,31 @@ function activeVehiclesOn(dateKey){
   });
 }
 
+let includeBengkelInOccupancy = true;
+
+function getFleetBreakdown(key){
+  const vehicles = activeVehiclesOn(key);
+  const normalVehicles = vehicles.filter(v => !(v.bengkelStart && key >= v.bengkelStart));
+  const bengkelVehicles = vehicles.filter(v => v.bengkelStart && key >= v.bengkelStart);
+
+  const occupiedKeys = new Set([...normalVehicles, ...bengkelVehicles].map(v => v.plat + '|' + v.vehicle));
+  const issuedCars = MASTER_CARS.filter(c => c.issued <= key);
+  const unassigned = issuedCars.filter(c => !occupiedKeys.has(c.plat + '|' + c.vehicle));
+  const unassignedBengkel = unassigned.filter(c => c.note === 'bengkel_since_issued');
+  const inactiveVehicles = unassigned.filter(c => c.note !== 'bengkel_since_issued');
+  const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
+
+  const totalFleet = issuedCars.length;
+  const denom = includeBengkelInOccupancy ? totalFleet : (totalFleet - allBengkelVehicles.length);
+  const occupancy = denom > 0 ? (normalVehicles.length / denom * 100) : 0;
+
+  const denomIncl = totalFleet;
+  const denomExcl = totalFleet - allBengkelVehicles.length;
+  const occupancyIncl = denomIncl > 0 ? (normalVehicles.length / denomIncl * 100) : 0;
+  const occupancyExcl = denomExcl > 0 ? (normalVehicles.length / denomExcl * 100) : 0;
+
+  return { normalVehicles, bengkelVehicles, unassignedBengkel, allBengkelVehicles, inactiveVehicles, totalFleet, denom, occupancy, occupancyIncl, occupancyExcl };
+}
 
 const VIEWS = {
   setoran: { key: 'setoran', label: 'mobil setor', max: 17, fmt: v => v, unit: '' },
@@ -452,7 +499,7 @@ function getValue(dateKey, viewKey){
   const d = DATA[dateKey];
   if(!d) return undefined;
   if(viewKey === 'setoran') return d.setoran;
-  if(viewKey === 'active') return d.occupancy;
+  if(viewKey === 'active') return getFleetBreakdown(dateKey).occupancy;
   if(viewKey === 'per_car') return d.per_car;
 }
 
@@ -465,6 +512,7 @@ const months = [
 const dayNames = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
 
 let currentView = 'active';
+let lastShownKey = null;
 
 function textColorFor(idx){ return idx>=3 ? '#fff' : '#042C53'; }
 
@@ -618,6 +666,7 @@ function hideTooltip(){
 function showDetail(key){
   const d = DATA[key];
   if(!d) return;
+  lastShownKey = key;
   const detail = document.getElementById('detail');
   detail.classList.add('show');
   const dateObj = new Date(key+'T00:00:00');
@@ -627,24 +676,12 @@ function showDetail(key){
   const rosterBox = document.getElementById('detailRoster');
 
   if(currentView === 'active'){
-    const vehicles = activeVehiclesOn(key);
-    const normalVehicles = vehicles.filter(v => !(v.bengkelStart && key >= v.bengkelStart));
-    const bengkelVehicles = vehicles.filter(v => v.bengkelStart && key >= v.bengkelStart);
-
-    const occupiedKeys = new Set([...normalVehicles, ...bengkelVehicles].map(v => v.plat + '|' + v.vehicle));
-
-    const issuedCars = MASTER_CARS.filter(c => c.issued <= key);
-    const unassigned = issuedCars.filter(c => !occupiedKeys.has(c.plat + '|' + c.vehicle));
-    const unassignedBengkel = unassigned.filter(c => c.note === 'bengkel_since_issued');
-    const inactiveVehicles = unassigned.filter(c => c.note !== 'bengkel_since_issued');
-
-    const totalFleet = issuedCars.length;
-    const occupancy = totalFleet > 0 ? (normalVehicles.length / totalFleet * 100) : 0;
-    const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
+    const { normalVehicles, allBengkelVehicles, inactiveVehicles, totalFleet, occupancyIncl, occupancyExcl } = getFleetBreakdown(key);
 
     let gridHtml =
       item('Setoran masuk', setoranValue(d)) +
-      item('Okupansi', occupancy.toFixed(1) + '%');
+      item('Okupansi', occupancyIncl.toFixed(1) + '%') +
+      item('Okupansi (exclude mobil rusak)', occupancyExcl.toFixed(1) + '%');
     document.getElementById('detailGrid').innerHTML = gridHtml;
 
     const pyramidBox = document.getElementById('detailPyramid');
@@ -758,10 +795,27 @@ document.querySelectorAll('#viewSwitch button').forEach(btn=>{
   });
 });
 
+document.getElementById('bengkelToggle').addEventListener('change', (e)=>{
+  includeBengkelInOccupancy = e.target.checked;
+  buildStats();
+  renderCalendar();
+  if(document.getElementById('detail').classList.contains('show') && lastShownKey){
+    showDetail(lastShownKey);
+  }
+});
+
 buildLegend();
 buildStats();
 renderCalendar();
 showDetail(VAL_DATE);
+
+// On mobile, default the swipeable calendar to the latest month instead of the first one
+if(window.matchMedia('(max-width:480px)').matches){
+  requestAnimationFrame(()=>{
+    const monthsEl = document.getElementById('months');
+    monthsEl.scrollLeft = monthsEl.scrollWidth;
+  });
+}
 </script>
 </body>
 </html>
