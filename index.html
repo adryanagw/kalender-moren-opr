@@ -120,7 +120,9 @@
   }
   .tt-rank{color:var(--ink-faint);font-family:var(--font-mono);font-size:12px;}
   .tt-name{font-weight:600;color:var(--ink);display:flex;flex-direction:column;}
+  .tt-name-line{white-space:nowrap;}
   .tt-vehicle{font-weight:400;font-size:11.5px;color:var(--ink-faint);}
+  .tt-mobile-label{display:none;}
   .tt-plat{font-family:var(--font-mono);color:var(--accent-strong);font-weight:600;font-size:13px;}
   .tt-lastpay{color:var(--ink-soft);font-size:12.5px;}
   .tt-offdays{color:var(--ink-faint);font-size:11px;}
@@ -152,6 +154,8 @@
     .tt-lastpay{grid-area:lastpay;font-size:11.5px;}
     .tt-outstanding{grid-area:outstanding;text-align:left;font-size:12.5px;}
     .tt-deposit{grid-area:deposit;text-align:right;font-size:11px;}
+    .tt-mobile-label{display:inline;font-weight:400;color:var(--ink-faint);}
+    .tt-outstanding .tt-mobile-label{font-weight:600;color:var(--ink-faint);}
   }
 
   .roster-section{margin-top:14px;}
@@ -933,12 +937,12 @@ function renderTunggakan(){
     else if(r.daysDue >= 5) severity = 'tt-mid';
     html += '<div class="tt-row">' +
       '<span class="tt-rank">'+(i+1)+'</span>' +
-      '<span class="tt-name">'+r.name+(r.overDeposit ? ' <span class="tt-warn" title="Outstanding melebihi deposit">&#9888;</span>' : '')+'<span class="tt-vehicle">'+r.vehicle+' &middot; '+r.plat+'</span></span>' +
+      '<span class="tt-name"><span class="tt-name-line">'+r.name+(r.overDeposit ? ' <span class="tt-warn" title="Outstanding melebihi deposit">&#9888;</span>' : '')+'</span><span class="tt-vehicle">'+r.vehicle+' &middot; '+r.plat+'</span></span>' +
       '<span class="tt-plat">Rp'+(r.dailyRate||0).toLocaleString('id-ID')+'/hari</span>' +
       '<span class="tt-lastpay">'+lastPayFmt+(r.offDays > 0 ? ' <span class="tt-offdays">('+r.offDays+' off)</span>' : '')+'</span>' +
       '<span class="tt-days '+severity+'">'+r.daysDue+' hari</span>' +
-      '<span class="tt-outstanding">Rp'+r.tunggakan.toLocaleString('id-ID')+'</span>' +
-      '<span class="tt-deposit">'+(r.deposit != null ? 'Rp'+r.deposit.toLocaleString('id-ID') : '-')+'</span>' +
+      '<span class="tt-outstanding"><span class="tt-mobile-label">Outstanding: </span>Rp'+r.tunggakan.toLocaleString('id-ID')+'</span>' +
+      '<span class="tt-deposit"><span class="tt-mobile-label">Deposit: </span>'+(r.deposit != null ? 'Rp'+r.deposit.toLocaleString('id-ID') : '-')+'</span>' +
     '</div>';
   });
   html += '</div>';
