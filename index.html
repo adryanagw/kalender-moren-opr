@@ -123,12 +123,22 @@
   .tt-vehicle{font-weight:400;font-size:11.5px;color:var(--ink-faint);}
   .tt-plat{font-family:var(--font-mono);color:var(--accent-strong);font-weight:600;font-size:13px;}
   .tt-lastpay{color:var(--ink-soft);font-size:12.5px;}
+  .tt-offdays{color:var(--ink-faint);font-size:11px;}
   .tt-days{font-family:var(--font-mono);font-weight:700;text-align:center;border-radius:999px;padding:4px 8px;}
   .tt-outstanding{font-family:var(--font-mono);text-align:right;color:var(--ink);}
   .tt-low{background:#E3F5E9;color:#1E7A45;}
   .tt-mid{background:#FDF3D9;color:#9A7B0A;}
   .tt-high{background:#FCEBEB;color:#B03A3A;}
   .tt-note{font-size:12px;color:var(--ink-faint);margin:-6px 0 12px;}
+  .wa-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#25D366;color:#fff;border:none;border-radius:999px;
+    padding:11px 18px;font-size:13.5px;font-weight:600;cursor:pointer;
+    font-family:var(--font-sans);margin-bottom:14px;touch-action:manipulation;
+    box-shadow:0 4px 12px rgba(37,211,102,0.3);
+  }
+  .wa-btn:hover{background:#20BD5A;}
+  .wa-btn:active{transform:scale(0.97);}
 
   @media (max-width:640px){
     .tt-row{grid-template-columns:24px 1fr 70px;grid-template-areas:"rank name days" ". plat plat" ". lastpay lastpay" ". outstanding outstanding";row-gap:2px;padding:10px;}
@@ -479,31 +489,31 @@ const MASTER_CARS = [
 ];
 
 const ROSTER = [
-  {name:"Florentina Dyah Ayu", start:"2026-04-11", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1291 PNT", lastPay:"2026-07-17", outstanding:1400000, dailyRate:350000},
+  {name:"Florentina Dyah Ayu", start:"2026-04-11", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1291 PNT", lastPay:"2026-07-17", outstanding:1400000, dailyRate:350000, offDays:0},
   {name:"Daniel Ricardo", start:"2026-04-18", end:"2026-05-16", status:"Inactive", vehicle:"Omoda E5", plat:"B 1132 PNT"},
   {name:"Tanu Wijaya", start:"2026-04-20", end:"2026-05-03", status:"Inactive", vehicle:"Omoda E5", plat:"B 1134 PNT"},
   {name:"M. Syaifullah Ilham", start:"2026-04-23", end:"2026-07-17", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1140 PNV"},
-  {name:"Samuel Silalahi", start:"2026-04-23", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1139 PNV", lastPay:"2026-07-15", outstanding:2100000, dailyRate:350000},
+  {name:"Samuel Silalahi", start:"2026-04-23", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1139 PNV", lastPay:"2026-07-15", outstanding:2100000, dailyRate:350000, offDays:0},
   {name:"Apriyanto", start:"2026-04-23", end:"2026-06-19", status:"Inactive", vehicle:"Omoda E5", plat:"B 1134 PNT"},
   {name:"Irfan Prasetyo", start:"2026-04-24", end:"2026-05-29", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1142 PNV"},
-  {name:"Angga Sayidiningrat", start:"2026-04-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1813 PNR", lastPay:"2026-07-15", outstanding:2100000, dailyRate:350000},
+  {name:"Angga Sayidiningrat", start:"2026-04-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1813 PNR", lastPay:"2026-07-15", outstanding:2100000, dailyRate:350000, offDays:0},
   {name:"Albertus Fernando", start:"2026-04-25", end:"2026-06-01", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1141 PNV"},
-  {name:"Fachmi Asri", start:"2026-06-05", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1141 PNV", lastPay:"2026-07-19", outstanding:700000, dailyRate:350000},
-  {name:"Dicky Aditya", start:"2026-06-08", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2657 PNO", lastPay:"2026-07-15", outstanding:2220000, dailyRate:370000},
+  {name:"Fachmi Asri", start:"2026-06-05", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1141 PNV", lastPay:"2026-07-19", outstanding:700000, dailyRate:350000, offDays:0},
+  {name:"Dicky Aditya", start:"2026-06-08", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2657 PNO", lastPay:"2026-07-15", outstanding:2220000, dailyRate:370000, offDays:1},
   {name:"Susanto", start:"2026-06-07", end:null, status:"Bengkel", vehicle:"Wuling Cloud", plat:"B 1142 PNV", bengkelStart:"2026-06-23"},
-  {name:"Cahyo Herdianto", start:"2026-06-10", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2654 PNO", lastPay:"2026-07-19", outstanding:740000, dailyRate:370000},
+  {name:"Cahyo Herdianto", start:"2026-06-10", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2654 PNO", lastPay:"2026-07-19", outstanding:740000, dailyRate:370000, offDays:0},
   {name:"Achmad Ramdani", start:"2026-06-11", end:"2026-06-13", status:"Inactive", vehicle:"Wuling Cloud Pro", plat:"B 2659 PNO"},
-  {name:"Iman Sunardi", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2656 PNO", lastPay:"2026-07-10", outstanding:4070000, dailyRate:370000},
-  {name:"Krisna Respati", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2655 PNO", lastPay:"2026-07-11", outstanding:3700000, dailyRate:370000},
-  {name:"Ridwan Rustandi", start:"2026-06-12", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1143 PNV", lastPay:"2026-07-16", outstanding:1750000, dailyRate:350000},
-  {name:"Ardy Maulana", start:"2026-06-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1134 PNT", lastPay:"2026-07-18", outstanding:1050000, dailyRate:350000},
+  {name:"Iman Sunardi", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2656 PNO", lastPay:"2026-07-10", outstanding:4070000, dailyRate:370000, offDays:3},
+  {name:"Krisna Respati", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2655 PNO", lastPay:"2026-07-11", outstanding:3700000, dailyRate:370000, offDays:3},
+  {name:"Ridwan Rustandi", start:"2026-06-12", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1143 PNV", lastPay:"2026-07-16", outstanding:1750000, dailyRate:350000, offDays:0},
+  {name:"Ardy Maulana", start:"2026-06-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1134 PNT", lastPay:"2026-07-18", outstanding:1050000, dailyRate:350000, offDays:0},
   {name:"Johan Charles", start:"2026-06-27", end:null, status:"Bengkel", vehicle:"Vf E34", plat:"B 1184 PNU", bengkelStart:"2026-06-30"},
   {name:"Christian Yanto", start:"2026-07-09", end:null, status:"Bengkel", vehicle:"Vf E34", plat:"B 1182 PNU", bengkelStart:"2026-07-20"},
-  {name:"Holin Ibrahim", start:"2026-06-17", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2659 PNO", lastPay:"2026-07-12", outstanding:3330000, dailyRate:370000},
-  {name:"Ujang Endi Ruswandi", start:"2026-06-22", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2398 PYD", lastPay:"2026-07-14", outstanding:1750000, dailyRate:250000},
-  {name:"Renny Lestari", start:"2026-06-19", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2413 PYD", lastPay:"2026-07-20", outstanding:270000, dailyRate:270000},
-  {name:"Reliandra Fachri", start:"2026-06-30", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2172 PNP", lastPay:"2026-07-15", outstanding:2220000, dailyRate:370000},
-  {name:"Azis Saepuloh", start:"2026-07-04", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2396 PYD", lastPay:"2026-07-13", outstanding:2000000, dailyRate:250000},
+  {name:"Holin Ibrahim", start:"2026-06-17", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2659 PNO", lastPay:"2026-07-12", outstanding:3330000, dailyRate:370000, offDays:0},
+  {name:"Ujang Endi Ruswandi", start:"2026-06-22", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2398 PYD", lastPay:"2026-07-14", outstanding:1750000, dailyRate:250000, offDays:0},
+  {name:"Renny Lestari", start:"2026-06-19", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2413 PYD", lastPay:"2026-07-20", outstanding:270000, dailyRate:270000, offDays:0},
+  {name:"Reliandra Fachri", start:"2026-06-30", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2172 PNP", lastPay:"2026-07-15", outstanding:2220000, dailyRate:370000, offDays:0},
+  {name:"Azis Saepuloh", start:"2026-07-04", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2396 PYD", lastPay:"2026-07-13", outstanding:2000000, dailyRate:250000, offDays:0},
   {name:"(Tidak ada driver)", start:"2026-05-17", end:null, status:"Bengkel", vehicle:"Omoda E5", plat:"B 1132 PNT", bengkelStart:"2026-05-17"}
 ];
 
@@ -849,17 +859,40 @@ function daysBetween(fromISO, toISO){
   return Math.round((b-a) / 86400000);
 }
 
+const SUPERVISOR_WA_NUMBER = '6282136673896';
+let currentTunggakanRows = [];
+
+function sendTunggakanToSupervisor(){
+  const overdueRows = currentTunggakanRows.filter(r => r.daysDue > 0);
+  const dateFmt = new Date(VAL_DATE+'T00:00:00').toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+
+  let msg = 'This is a notification about today\'s over due (' + dateFmt + '):\n\n';
+  if(overdueRows.length === 0){
+    msg += 'No overdue drivers today.';
+  } else {
+    overdueRows.forEach((r,i)=>{
+      msg += (i+1) + '. ' + r.name + ' (' + r.plat + ') - ' + r.daysDue + ' hari - Rp' + r.tunggakan.toLocaleString('id-ID') + '\n';
+    });
+    const total = overdueRows.reduce((s,r)=>s+r.tunggakan,0);
+    msg += '\nTotal: Rp' + total.toLocaleString('id-ID');
+  }
+
+  const url = 'https://wa.me/' + SUPERVISOR_WA_NUMBER + '?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+}
+
 function renderTunggakan(){
   const cutoffDate = addDaysISO(VAL_DATE, -2); // ops gives a 2-day grace period before setoran counts as overdue
   const activeDrivers = ROSTER.filter(r => r.status === 'Active' && r.lastPay);
   const rows = activeDrivers.map(r => {
-    const daysDue = Math.max(0, daysBetween(r.lastPay, cutoffDate));
+    const daysDue = Math.max(0, daysBetween(r.lastPay, cutoffDate) - (r.offDays || 0));
     return { ...r, daysDue, tunggakan: daysDue * (r.dailyRate || 0) };
   }).sort((a,b) => b.daysDue - a.daysDue);
 
   const totalOutstanding = rows.reduce((s,r)=>s+r.tunggakan, 0);
   const avgDaysDue = rows.length ? (rows.reduce((s,r)=>s+r.daysDue,0)/rows.length) : 0;
   const worst = rows.length ? rows[0] : null;
+  currentTunggakanRows = rows;
 
   let html = '<div class="stat-row">' +
     stat('Total Tunggakan', 'Rp' + totalOutstanding.toLocaleString('id-ID')) +
@@ -867,7 +900,13 @@ function renderTunggakan(){
     stat('Paling Lama', worst ? worst.daysDue + ' hari' : '-') +
     '</div>';
 
-  html += '<div class="tt-note">Days Due dihitung dengan grace period H-2 dari val date ('+cutoffDate+') — sesuai default delay setoran operasional. Outstanding = tarif harian × Days Due.</div>';
+  html += '<div class="tt-note">Days Due = (cutoff H-2 dari val date, '+cutoffDate+') − Last Pay Dt − off days driver (jatah libur dalam interval tersebut). Outstanding = tarif harian × Days Due.</div>';
+
+  const overdueCount = rows.filter(r=>r.daysDue > 0).length;
+  html += '<button class="wa-btn" onclick="sendTunggakanToSupervisor()">' +
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.2-.1.2-.3.3-.4.1-.2 0-.4 0-.5C11 9.5 10.6 8.5 10.4 8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.6-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>' +
+    'Kirim ke Supervisor (' + overdueCount + ' overdue)' +
+  '</button>';
 
   html += '<div class="tunggakan-table">';
   html += '<div class="tt-row tt-head">' +
@@ -888,7 +927,7 @@ function renderTunggakan(){
       '<span class="tt-rank">'+(i+1)+'</span>' +
       '<span class="tt-name">'+r.name+'<span class="tt-vehicle">'+r.vehicle+' &middot; '+r.plat+'</span></span>' +
       '<span class="tt-plat">Rp'+(r.dailyRate||0).toLocaleString('id-ID')+'/hari</span>' +
-      '<span class="tt-lastpay">'+lastPayFmt+'</span>' +
+      '<span class="tt-lastpay">'+lastPayFmt+(r.offDays > 0 ? ' <span class="tt-offdays">('+r.offDays+' off)</span>' : '')+'</span>' +
       '<span class="tt-days '+severity+'">'+r.daysDue+' hari</span>' +
       '<span class="tt-outstanding">Rp'+r.tunggakan.toLocaleString('id-ID')+'</span>' +
     '</div>';
