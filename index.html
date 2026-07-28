@@ -9,18 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F1EFE9; --panel:#FFFFFF; --line:#DFDACC; --ink:#232220; --ink-soft:#5C594E;
-    --ink-faint:#8D8977; --teal:#0F6B54; --teal-deep:#0A4A3B; --teal-pale:#DCEAE4;
-    --coral:#9C5A2E; --coral-pale:#EBE0D2; --red:#A23A2E; --red-pale:#EADAD6;
-    --blue:#3E6690; --blue-pale:#DCE5EE; --violet:#6C5A96; --violet-pale:#E3DEEC;
-    --gold:#A87F1E; --gold-pale:#EBE1C4;
+    --paper:#EAE8E2; --panel:#FFFFFF; --line:#D3D0C6; --ink:#1D1D1B; --ink-soft:#4E4C45;
+    --ink-faint:#87847A; --teal:#0B5C48; --teal-deep:#073B2E; --teal-pale:#DCEAE4;
+    --coral:#8A4A22; --coral-pale:#EBE0D2; --red:#8F2E22; --red-pale:#EADAD6;
+    --blue:#28516F; --blue-pale:#DCE5EE; --violet:#57457C; --violet-pale:#E3DEEC;
+    --gold:#8C6A17; --gold-pale:#EBE1C4;
     --grad-signature: linear-gradient(90deg, var(--teal) 0%, var(--gold) 45%, var(--coral) 75%, var(--violet) 100%);
-    --shadow-sm: 0 1px 2px rgba(30,25,10,.05);
-    --shadow-md: 0 2px 6px rgba(30,25,10,.05), 0 10px 26px rgba(30,25,10,.06);
+    --shadow-sm: 0 1px 2px rgba(20,18,10,.06);
+    --shadow-md: 0 2px 6px rgba(20,18,10,.06), 0 10px 26px rgba(20,18,10,.08);
     --font-display: 'Quicksand', sans-serif;
     --font-sans: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-mono: 'Nunito', "SF Mono", monospace;
-    --radius:18px;
+    --radius:12px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){ --paper:#17181A; --panel:#212320; --line:#34362F; --ink:#EDEBE2; --ink-soft:#B7B29E;
@@ -40,15 +40,15 @@
   .wrap{max-width:1080px;margin:0 auto;padding:0 16px;}
 
   .signature-bar{height:4px;background:var(--grad-signature);}
-  .topbar{background:var(--teal-pale);color:var(--teal-deep);padding:9px 16px;}
+  .topbar{background:var(--teal-deep);color:#EAF3EF;padding:9px 16px;}
   .topbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:8px;
     font-family:var(--font-sans);font-weight:700;font-size:12px;letter-spacing:.02em;}
-  .pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex:0 0 auto;
+  .pulse-dot{width:8px;height:8px;border-radius:50%;background:#E8746A;flex:0 0 auto;
     animation:pulse 1.8s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(216,96,76,.4);}50%{opacity:.65;box-shadow:0 0 0 5px rgba(216,96,76,0);}}
-  .live-label{color:var(--red);font-weight:800;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(232,116,106,.5);}50%{opacity:.65;box-shadow:0 0 0 5px rgba(232,116,106,0);}}
+  .live-label{color:#E8746A;font-weight:800;}
   .topbar-note{opacity:.85;margin-left:auto;text-align:right;font-weight:600;}
-  .theme-toggle{background:var(--panel);border:1.5px solid var(--line);border-radius:999px;color:var(--teal-deep);
+  .theme-toggle{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:999px;color:#EAF3EF;
     font-size:11px;font-weight:700;padding:4px 11px;cursor:pointer;font-family:var(--font-sans);margin-left:10px;
     transition:transform .12s, box-shadow .12s;}
   .theme-toggle:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm);}
@@ -72,10 +72,10 @@
   .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0;}
   .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;
     box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
-  .stat::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--ink-faint);opacity:.35;}
-  .stat:has(.val.good)::before{background:var(--teal);opacity:.6;}
-  .stat:has(.val.warn)::before{background:var(--coral);opacity:.6;}
-  .stat:has(.val.bad)::before{background:var(--red);opacity:.6;}
+  .stat::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--ink-faint);opacity:.55;}
+  .stat:has(.val.good)::before{background:var(--teal);opacity:1;}
+  .stat:has(.val.warn)::before{background:var(--coral);opacity:1;}
+  .stat:has(.val.bad)::before{background:var(--red);opacity:1;}
   .stat .lbl{font-family:var(--font-sans);font-size:10.5px;color:var(--ink-faint);font-weight:700;
     text-transform:uppercase;letter-spacing:.04em;}
   .stat .val{font-family:var(--font-display);font-weight:700;font-size:22px;margin-top:6px;color:var(--ink);}
@@ -109,16 +109,23 @@
   tbody tr:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(30,25,10,.08);position:relative;z-index:1;}
   .card table tr:first-child th:first-child{border-top-left-radius:var(--radius);}
   .card table tr:first-child th:last-child{border-top-right-radius:var(--radius);}
+  .report-table{table-layout:fixed;width:100%;}
+  .report-table th:nth-child(1),.report-table td:nth-child(1){width:18%;}
+  .report-table th:nth-child(2),.report-table td:nth-child(2){width:28%;}
+  .report-table th:nth-child(3),.report-table td:nth-child(3){width:18%;}
+  .report-table th:nth-child(4),.report-table td:nth-child(4){width:18%;}
+  .report-table th:nth-child(5),.report-table td:nth-child(5){width:18%;}
+  .report-table td, .report-table th{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .name{font-weight:700;font-family:var(--font-sans);}
   .mono{font-family:var(--font-mono);font-weight:600;}
 
   .pill{display:inline-flex;align-items:center;font-family:var(--font-sans);font-size:11px;padding:3.5px 10px;
-    border-radius:999px;font-weight:700;white-space:nowrap;}
-  .p-green{background:var(--teal-pale);color:var(--teal-deep);}
-  .p-gray{background:var(--paper);color:var(--ink-faint);}
-  .p-amber{background:var(--coral-pale);color:var(--coral);}
-  .p-red{background:var(--red-pale);color:var(--red);}
-  .p-blue{background:var(--blue-pale);color:var(--blue);}
+    border-radius:6px;font-weight:700;white-space:nowrap;color:#fff;}
+  .p-green{background:var(--teal);}
+  .p-gray{background:var(--ink-faint);}
+  .p-amber{background:var(--coral);}
+  .p-red{background:var(--red);}
+  .p-blue{background:var(--blue);}
 
   .table-scroll{overflow-x:auto;}
   .note{font-size:12px;color:var(--ink-faint);padding:10px 16px;}
@@ -178,15 +185,12 @@
   .cd-stat-val{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin-top:2px;}
   .cd-stat-val .pct{font-size:11px;font-weight:600;color:var(--ink-faint);}
   .cd-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;}
-  .cd-cat{border-radius:14px;padding:12px 10px;text-align:center;}
-  .cd-cat.aktif{background:var(--teal-pale);}
-  .cd-cat.bengkel{background:var(--red-pale);}
-  .cd-cat.inaktif{background:var(--coral-pale);}
-  .cd-cat-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);}
-  .cd-cat-val{font-family:var(--font-display);font-size:19px;font-weight:700;margin-top:4px;}
-  .cd-cat.aktif .cd-cat-val{color:var(--teal-deep);}
-  .cd-cat.bengkel .cd-cat-val{color:var(--red);}
-  .cd-cat.inaktif .cd-cat-val{color:var(--coral);}
+  .cd-cat{border-radius:10px;padding:12px 10px;text-align:center;}
+  .cd-cat.aktif{background:var(--teal);}
+  .cd-cat.bengkel{background:var(--red);}
+  .cd-cat.inaktif{background:var(--coral);}
+  .cd-cat-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:rgba(255,255,255,.8);}
+  .cd-cat-val{font-family:var(--font-display);font-size:19px;font-weight:700;margin-top:4px;color:#fff;}
   .cd-total{background:var(--grad-signature);color:#fff;border-radius:14px;margin:12px 16px 0;padding:12px;text-align:center;box-shadow:var(--shadow-sm);}
   .cd-total-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;opacity:.85;}
   .cd-total-val{font-family:var(--font-display);font-size:19px;font-weight:700;margin-top:2px;}
@@ -1129,10 +1133,10 @@ const MONTH_NAMES_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Jul
 const WEEKDAY_NAMES_SHORT = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
 
 function ledgerStatusColor(status){
-  return { full:'#8FBBA8', partial:'#DDB35C', libur:'#8FA8C7', bengkel:'#ABA695', skip:'#C17264' }[status] || 'var(--paper)';
+  return { full:'#1F7A5C', partial:'#B5790F', libur:'#2C5A82', bengkel:'#6B6860', skip:'#9C3327' }[status] || 'var(--paper)';
 }
 function ledgerStatusTextColor(status){
-  return { full:'#0A3D2E', partial:'#4A3105', libur:'#16283D', bengkel:'#3A362A', skip:'#4A140C' }[status] || 'var(--ink-faint)';
+  return { full:'#fff', partial:'#fff', libur:'#fff', bengkel:'#fff', skip:'#fff' }[status] || 'var(--ink-faint)';
 }
 function ledgerStatusLabel(status){
   return { full:'Full', partial:'Partial', libur:'Libur', bengkel:'Bengkel', skip:'Skip' }[status] || status;
@@ -1212,7 +1216,7 @@ function renderReportBody(containerId, ledger, otherFieldKey, otherFieldLabel){
     html += `<div class="report-month-section">
       <div class="report-month-title">${monthLabel}</div>
       <div class="card">
-        <div class="table-scroll"><table><tr><th>Tanggal</th><th>${otherFieldLabel}</th><th>Status</th><th>Dibayar</th><th>Tarif</th></tr>
+        <div class="table-scroll"><table class="report-table"><tr><th>Tanggal</th><th>${otherFieldLabel}</th><th>Status</th><th>Dibayar</th><th>Tarif</th></tr>
         ${rows.map(r=>`<tr>
           <td class="mono">${r.tanggal}</td>
           <td>${r[otherFieldKey]}</td>
@@ -1304,10 +1308,10 @@ function drawMiniCalendarPDF(doc, x, y, cellSize, ym, rowsForMonth){
   const byDate = {};
   rowsForMonth.forEach(r=>byDate[r.tanggal]=r);
   const colorMap = {
-    full:[143,187,168], partial:[221,179,92], libur:[143,168,199], bengkel:[171,166,149], skip:[193,114,100],
+    full:[31,122,92], partial:[181,121,15], libur:[44,90,130], bengkel:[107,104,96], skip:[156,51,39],
   };
   const textColorMap = {
-    full:[10,61,46], partial:[74,49,5], libur:[22,40,61], bengkel:[58,54,42], skip:[74,20,12],
+    full:[255,255,255], partial:[255,255,255], libur:[255,255,255], bengkel:[255,255,255], skip:[255,255,255],
   };
   const symbolMap = { full:'\u2713', partial:'\u00BD', libur:'L', bengkel:'B', skip:'X' };
   const weekdays = ['M','S','S','R','K','J','S'];
@@ -1351,7 +1355,7 @@ function downloadReportPDF(meta, ledger){
 
   doc.setFont(undefined,'bold');
   doc.setFontSize(14);
-  doc.setTextColor(20,128,95);
+  doc.setTextColor(11,92,72);
   doc.text('MOREN', marginX, y);
   doc.setFontSize(9);
   doc.setTextColor(140,138,125);
@@ -1360,7 +1364,7 @@ function downloadReportPDF(meta, ledger){
   doc.text('Dicetak: ' + new Date().toLocaleString('id-ID'), pageW-marginX, y, {align:'right'});
 
   y += 12;
-  doc.setDrawColor(20,128,95);
+  doc.setDrawColor(11,92,72);
   doc.setLineWidth(0.8);
   doc.line(marginX, y, pageW-marginX, y);
   y += 9;
@@ -1410,7 +1414,7 @@ function downloadReportPDF(meta, ledger){
       head: [['Tanggal', meta.otherLabel, 'Status', 'Dibayar', 'Tarif']],
       body: rows.map(r=>[r.tanggal, String(r[meta.otherKey]||'-'), ledgerStatusLabel(r.status), fmt(r.paid), fmt(r.tarif)]),
       styles: { fontSize: 8, textColor: [40,40,35], cellPadding: 2 },
-      headStyles: { fillColor: [20,128,95], textColor: [255,255,255], fontStyle: 'bold' },
+      headStyles: { fillColor: [11,92,72], textColor: [255,255,255], fontStyle: 'bold' },
       alternateRowStyles: { fillColor: [250,246,237] },
       margin: { left: marginX, right: marginX },
       theme: 'grid',
@@ -1420,7 +1424,7 @@ function downloadReportPDF(meta, ledger){
     const totalPaid = rows.reduce((s,r)=>s+r.paid,0);
     doc.setFont(undefined,'bold');
     doc.setFontSize(10);
-    doc.setTextColor(20,128,95);
+    doc.setTextColor(11,92,72);
     doc.text('Total setoran bulan ini: ' + fmt(totalPaid), marginX, y);
   });
 
