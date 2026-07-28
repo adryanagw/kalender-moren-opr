@@ -2,1004 +2,1604 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="format-detection" content="telephone=no">
-<title>GO MOREN — Kalender Operasional Armada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Operasional Moren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #F6F5F1;
-    --panel: #FFFFFF;
-    --ink: #1E2420;
-    --ink-soft: #5B6660;
-    --ink-faint: #8B948E;
-    --line: #E3E1D8;
-    --accent: #0F6E56;
-    --accent-soft: #E1F5EE;
-    --accent-strong: #04342C;
-    --warn: #A32D2D;
-    --warn-soft: #FCEBEB;
-    --radius: 10px;
-    --font-display: 'Georgia', 'Iowan Old Style', serif;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    --font-mono: 'SF Mono', 'Consolas', monospace;
+    --paper:#F1EFE9; --panel:#FFFFFF; --line:#DFDACC; --ink:#232220; --ink-soft:#5C594E;
+    --ink-faint:#8D8977; --teal:#0F6B54; --teal-deep:#0A4A3B; --teal-pale:#DCEAE4;
+    --coral:#9C5A2E; --coral-pale:#EBE0D2; --red:#A23A2E; --red-pale:#EADAD6;
+    --blue:#3E6690; --blue-pale:#DCE5EE; --violet:#6C5A96; --violet-pale:#E3DEEC;
+    --gold:#A87F1E; --gold-pale:#EBE1C4;
+    --grad-signature: linear-gradient(90deg, var(--teal) 0%, var(--gold) 45%, var(--coral) 75%, var(--violet) 100%);
+    --shadow-sm: 0 1px 2px rgba(30,25,10,.05);
+    --shadow-md: 0 2px 6px rgba(30,25,10,.05), 0 10px 26px rgba(30,25,10,.06);
+    --font-display: 'Quicksand', sans-serif;
+    --font-sans: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-mono: 'Nunito', "SF Mono", monospace;
+    --radius:18px;
   }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--font-sans);
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --paper:#17181A; --panel:#212320; --line:#34362F; --ink:#EDEBE2; --ink-soft:#B7B29E;
+      --ink-faint:#807C6C; --teal:#3FA985; --teal-deep:#7DCBB0; --teal-pale:#17362D;
+      --coral:#C4906A; --coral-pale:#33291E; --red:#C77F71; --red-pale:#33221E;
+      --blue:#7FA0C4; --blue-pale:#1E2A38; --violet:#A594C7; --violet-pale:#282238; --gold:#C7A24F; --gold-pale:#332C18;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.25); --shadow-md: 0 2px 6px rgba(0,0,0,.3), 0 10px 26px rgba(0,0,0,.35); }
   }
-  .wrap{
-    max-width:1080px;margin:0 auto;
-    padding:2.5rem 1.5rem 4rem;
-    padding-left:max(1.5rem, env(safe-area-inset-left));
-    padding-right:max(1.5rem, env(safe-area-inset-right));
-    padding-bottom:max(4rem, env(safe-area-inset-bottom));
-  }
+  :root[data-theme="dark"]{ --paper:#17181A; --panel:#212320; --line:#34362F; --ink:#EDEBE2; --ink-soft:#B7B29E;
+    --ink-faint:#807C6C; --teal:#3FA985; --teal-deep:#7DCBB0; --teal-pale:#17362D;
+    --coral:#C4906A; --coral-pale:#33291E; --red:#C77F71; --red-pale:#33221E;
+    --blue:#7FA0C4; --blue-pale:#1E2A38; --violet:#A594C7; --violet-pale:#282238; --gold:#C7A24F; --gold-pale:#332C18;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.25); --shadow-md: 0 2px 6px rgba(0,0,0,.3), 0 10px 26px rgba(0,0,0,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);padding:0 0 60px;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px;}
 
-  header{margin-bottom:1.75rem;border-bottom:1px solid var(--line);padding-bottom:1.5rem;}
-  .eyebrow{
-    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--accent);font-weight:600;margin-bottom:0.5rem;
-  }
-  h1{
-    font-family:var(--font-display);
-    font-size:32px;font-weight:400;margin:0 0 0.4rem;color:var(--accent-strong);
-    letter-spacing:-0.01em;
-  }
-  .sub{color:var(--ink-soft);font-size:14.5px;max-width:640px;line-height:1.55;}
+  .signature-bar{height:4px;background:var(--grad-signature);}
+  .topbar{background:var(--teal-pale);color:var(--teal-deep);padding:9px 16px;}
+  .topbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:8px;
+    font-family:var(--font-sans);font-weight:700;font-size:12px;letter-spacing:.02em;}
+  .pulse-dot{width:8px;height:8px;border-radius:50%;background:var(--red);flex:0 0 auto;
+    animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(216,96,76,.4);}50%{opacity:.65;box-shadow:0 0 0 5px rgba(216,96,76,0);}}
+  .live-label{color:var(--red);font-weight:800;}
+  .topbar-note{opacity:.85;margin-left:auto;text-align:right;font-weight:600;}
+  .theme-toggle{background:var(--panel);border:1.5px solid var(--line);border-radius:999px;color:var(--teal-deep);
+    font-size:11px;font-weight:700;padding:4px 11px;cursor:pointer;font-family:var(--font-sans);margin-left:10px;
+    transition:transform .12s, box-shadow .12s;}
+  .theme-toggle:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm);}
 
-  .swipe-hint{
-    display:none;
-  }
-  .tap-hint{
-    display:none;
-  }
+  header{padding:26px 0 18px;}
+  .eyebrow{font-family:var(--font-display);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--teal);font-weight:700;margin-bottom:4px;}
+  h1{font-family:var(--font-display);font-size:29px;font-weight:700;margin:0;letter-spacing:-.005em;color:var(--ink);}
 
-  .controls{
-    display:flex;gap:12px;flex-wrap:wrap;margin:1.5rem 0 1.25rem;align-items:center;
-  }
-  .update-note{font-size:12.5px;color:var(--ink-faint);}
-  .seg{
-    display:inline-flex;background:var(--panel);border:1px solid var(--line);
-    border-radius:999px;padding:3px;gap:2px;
-  }
-  .seg button{
-    border:none;background:transparent;padding:9px 15px;border-radius:999px;
-    font-size:13px;font-weight:500;color:var(--ink-soft);cursor:pointer;
-    font-family:var(--font-sans);transition:background 0.15s, color 0.15s;
-    white-space:nowrap;touch-action:manipulation;
-  }
-  .seg button.active{background:var(--accent);color:#fff;}
-  .seg button:hover:not(.active){background:var(--accent-soft);color:var(--accent-strong);}
+  .tabs{display:flex;gap:8px;margin:0;overflow-x:auto;padding:4px 4px 8px 0;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex:0 0 auto;padding:9px 18px;background:var(--panel);border:1.5px solid var(--line);border-radius:999px;
+    font-family:var(--font-display);font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink-soft);
+    white-space:nowrap;transition:transform .12s, box-shadow .12s, color .12s, border-color .12s;}
+  .tab:not(.active):hover{border-color:var(--teal);color:var(--teal-deep);transform:translateY(-1px);}
+  .tab.active{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:var(--shadow-sm);}
 
-  .stat-row{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:10px;margin-bottom:1.75rem;
-  }
-  .stat{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:12px 14px;
-  }
-  .stat .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
-  .stat .value{font-family:var(--font-mono);font-size:19px;font-weight:600;color:var(--accent-strong);}
-  .stat-secondary{opacity:0.6;}
-  .stat-secondary .value{color:var(--ink-soft);font-size:16px;}
+  .main-tabs{margin-top:2px;}
+  #tab-driver .tabs, #tab-kalender .tabs{margin:16px 0 14px;gap:8px;}
 
-  .day-tooltip{
-    display:none;position:fixed;z-index:1000;pointer-events:none;
-    background:var(--accent-strong);color:var(--bg);
-    border-radius:8px;padding:9px 12px;font-size:12.5px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.18);min-width:170px;
-  }
-  .day-tooltip .tip-row{
-    display:flex;justify-content:space-between;gap:14px;padding:2px 0;
-  }
-  .day-tooltip .tip-row span{opacity:0.85;}
-  .day-tooltip .tip-row b{font-family:var(--font-mono);}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0;}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;
+    box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+  .stat::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--ink-faint);opacity:.35;}
+  .stat:has(.val.good)::before{background:var(--teal);opacity:.6;}
+  .stat:has(.val.warn)::before{background:var(--coral);opacity:.6;}
+  .stat:has(.val.bad)::before{background:var(--red);opacity:.6;}
+  .stat .lbl{font-family:var(--font-sans);font-size:10.5px;color:var(--ink-faint);font-weight:700;
+    text-transform:uppercase;letter-spacing:.04em;}
+  .stat .val{font-family:var(--font-display);font-weight:700;font-size:22px;margin-top:6px;color:var(--ink);}
+  .stat .val.warn{color:var(--coral);}
+  .stat .val.bad{color:var(--red);}
+  .stat .val.good{color:var(--teal-deep);}
 
-  .tunggakan-table{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    overflow:hidden;
-  }
-  .tt-row{
-    display:grid;grid-template-columns:32px 1.6fr 1fr 1fr 90px 1.1fr 1fr;
-    gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--line);
-    font-size:13.5px;
-  }
-  .tt-row:last-child{border-bottom:none;}
-  .tt-head{
-    background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;
-    color:var(--ink-faint);font-weight:600;padding:9px 14px;
-  }
-  .tt-rank{color:var(--ink-faint);font-family:var(--font-mono);font-size:12px;}
-  .tt-name{font-weight:600;color:var(--ink);display:flex;flex-direction:column;}
-  .tt-name-line{white-space:nowrap;}
-  .tt-vehicle{font-weight:400;font-size:11.5px;color:var(--ink-faint);}
-  .tt-mobile-label{display:none;}
-  .tt-plat{font-family:var(--font-mono);color:var(--accent-strong);font-weight:600;font-size:13px;}
-  .tt-lastpay{color:var(--ink-soft);font-size:12.5px;}
-  .tt-offdays{color:var(--ink-faint);font-size:11px;}
-  .tt-warn{color:#D9822B;font-size:14px;}
-  .tt-days{font-family:var(--font-mono);font-weight:700;text-align:center;border-radius:999px;padding:4px 8px;}
-  .tt-outstanding{font-family:var(--font-mono);text-align:right;color:var(--ink);font-weight:700;font-size:14.5px;}
-  .tt-deposit{font-family:var(--font-mono);text-align:right;color:var(--ink-faint);font-weight:300;font-size:12px;}
-  .tt-low{background:#E3F5E9;color:#1E7A45;}
-  .tt-mid{background:#FDF3D9;color:#9A7B0A;}
-  .tt-high{background:#FCEBEB;color:#B03A3A;}
-  .tt-note{font-size:12px;color:var(--ink-faint);margin:-6px 0 12px;}
-  .wa-btn{
-    display:inline-flex;align-items:center;gap:8px;
-    background:#25D366;color:#fff;border:none;border-radius:999px;
-    padding:11px 18px;font-size:13.5px;font-weight:600;cursor:pointer;
-    font-family:var(--font-sans);margin-bottom:14px;touch-action:manipulation;
-    box-shadow:0 4px 12px rgba(37,211,102,0.3);
-  }
-  .wa-btn:hover{background:#20BD5A;}
-  .wa-btn:active{transform:scale(0.97);}
+  input#search-driver, input#search-mobil, input#search-hari-libur{width:100%;padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);
+    background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:12px;font-family:var(--font-sans);
+    transition:box-shadow .15s;}
+  input#search-driver:focus, input#search-mobil:focus, input#search-hari-libur:focus{outline:2px solid var(--teal);outline-offset:1px;box-shadow:var(--shadow-sm);}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;
+    box-shadow:var(--shadow-md);border-left:3px solid transparent;}
+  .card.card-warn{border-left-color:var(--red);}
+  .card.card-good{border-left-color:var(--teal);}
+  .card-title{font-family:var(--font-display);font-size:14.5px;font-weight:700;padding:15px 16px 0;color:var(--ink);}
+  .card-sub{font-size:12px;color:var(--ink-faint);padding:2px 16px 12px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-family:var(--font-sans);font-size:10.5px;font-weight:800;text-transform:uppercase;
+    letter-spacing:.03em;color:var(--ink-faint);padding:10px 12px;border-bottom:1.5px solid var(--line);background:var(--paper);}
+  th.sortable{cursor:pointer;user-select:none;white-space:nowrap;}
+  th.sortable:hover{color:var(--teal-deep);}
+  .sort-ic{font-size:9px;margin-left:3px;opacity:.4;}
+  .sort-ic.active{opacity:1;color:var(--teal);}
+  td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  tbody tr{transition:transform .12s, box-shadow .12s;}
+  tbody tr:hover td{background:var(--teal-pale);}
+  tbody tr:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(30,25,10,.08);position:relative;z-index:1;}
+  .card table tr:first-child th:first-child{border-top-left-radius:var(--radius);}
+  .card table tr:first-child th:last-child{border-top-right-radius:var(--radius);}
+  .name{font-weight:700;font-family:var(--font-sans);}
+  .mono{font-family:var(--font-mono);font-weight:600;}
+
+  .pill{display:inline-flex;align-items:center;font-family:var(--font-sans);font-size:11px;padding:3.5px 10px;
+    border-radius:999px;font-weight:700;white-space:nowrap;}
+  .p-green{background:var(--teal-pale);color:var(--teal-deep);}
+  .p-gray{background:var(--paper);color:var(--ink-faint);}
+  .p-amber{background:var(--coral-pale);color:var(--coral);}
+  .p-red{background:var(--red-pale);color:var(--red);}
+  .p-blue{background:var(--blue-pale);color:var(--blue);}
+
+  .table-scroll{overflow-x:auto;}
+  .note{font-size:12px;color:var(--ink-faint);padding:10px 16px;}
+
+  .cal-toggle-row{display:flex;align-items:center;gap:8px;padding:2px 4px 12px;font-size:12.5px;color:var(--ink-soft);}
+  .cal-toggle-row input{width:16px;height:16px;accent-color:var(--teal);}
+
+  .period-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:20px 0 0;}
+  .period-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+  .period-seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel);}
+  .period-seg button{border:none;background:transparent;padding:7px 16px;font-size:12.5px;font-weight:700;
+    cursor:pointer;color:var(--ink-soft);font-family:var(--font-display);transition:background .12s,color .12s;}
+  .period-seg button.active{background:var(--teal);color:#fff;}
+
+  .cal-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin:16px 0 12px;}
+  .cal-nav-btn{background:var(--panel);border:1.5px solid var(--line);border-radius:999px;
+    width:34px;height:34px;font-size:15px;cursor:pointer;color:var(--ink);font-family:var(--font-sans);
+    transition:transform .12s, box-shadow .12s, color .12s, border-color .12s;}
+  .cal-nav-btn:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-1px);box-shadow:var(--shadow-sm);}
+  .cal-month-label{font-family:var(--font-display);font-size:15px;font-weight:700;min-width:170px;text-align:center;}
+  .cal-legend{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.5px;
+    color:var(--ink-faint);margin-bottom:10px;font-weight:600;}
+  .cal-legend-chips{display:flex;gap:3px;}
+  .cal-legend-chips span{width:14px;height:14px;border-radius:5px;display:inline-block;}
+  .cal-swipe-hint{display:none;text-align:center;font-size:11.5px;color:var(--ink-faint);
+    margin-bottom:8px;animation:calSwipe 1.8s ease-in-out infinite;font-weight:600;}
+  @keyframes calSwipe{0%,100%{opacity:.5;transform:translateX(0);}50%{opacity:1;transform:translateX(3px);}}
+  @media (max-width:640px){ .cal-swipe-hint{display:block;} }
+  .cal-hint{text-align:center;font-size:11px;color:var(--ink-faint);margin:-4px 0 8px;}
+  .cal-toggle-row{display:flex;align-items:center;justify-content:center;gap:8px;padding:2px 4px 14px;
+    font-size:12px;color:var(--ink-soft);font-weight:600;flex-wrap:wrap;}
+  .cal-toggle-row .seg{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;}
+  .cal-toggle-row .seg button{border:none;background:var(--panel);padding:6px 14px;font-size:11.5px;
+    font-weight:700;cursor:pointer;color:var(--ink-soft);font-family:var(--font-sans);}
+  .cal-toggle-row .seg button.active{background:var(--blue);color:#fff;}
+  .cal-day .pctval{font-size:8.5px;font-weight:700;}
+  .cal-multi{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  @media (max-width:800px){ .cal-multi{grid-template-columns:1fr;} }
+  .cal-month-block{background:var(--panel);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px;}
+  .cal-month-block .cal-month-title{font-family:var(--font-display);font-size:13.5px;font-weight:700;
+    text-align:center;margin-bottom:8px;color:var(--ink);}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;user-select:none;}
+  .cal-weekday{font-family:var(--font-sans);font-size:9.5px;font-weight:800;text-transform:uppercase;
+    color:var(--ink-faint);text-align:center;padding-bottom:4px;}
+  .cal-day{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;font-family:var(--font-sans);font-size:11px;font-weight:700;cursor:pointer;
+    border:1.5px solid var(--line);color:var(--ink);position:relative;transition:transform .12s;}
+  .cal-day:not(.empty):hover{transform:scale(1.1);z-index:1;box-shadow:0 4px 10px rgba(30,25,10,.15);}
+  .cal-day.empty{border:none;cursor:default;background:transparent!important;}
+  .cal-day .n{font-size:11px;}
+  .cal-day.today{outline:2.5px solid var(--blue);outline-offset:-2px;}
+  .cal-day.selected{outline:2.5px solid var(--ink);outline-offset:-2px;}
+
+  .cd-title{font-family:var(--font-display);font-size:18px;font-weight:700;padding:16px 16px 12px;color:var(--ink);}
+  .cd-stats{display:flex;flex-wrap:wrap;gap:18px;padding:0 16px 14px;}
+  .cd-stat-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-faint);}
+  .cd-stat-val{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin-top:2px;}
+  .cd-stat-val .pct{font-size:11px;font-weight:600;color:var(--ink-faint);}
+  .cd-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;}
+  .cd-cat{border-radius:14px;padding:12px 10px;text-align:center;}
+  .cd-cat.aktif{background:var(--teal-pale);}
+  .cd-cat.bengkel{background:var(--red-pale);}
+  .cd-cat.inaktif{background:var(--coral-pale);}
+  .cd-cat-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);}
+  .cd-cat-val{font-family:var(--font-display);font-size:19px;font-weight:700;margin-top:4px;}
+  .cd-cat.aktif .cd-cat-val{color:var(--teal-deep);}
+  .cd-cat.bengkel .cd-cat-val{color:var(--red);}
+  .cd-cat.inaktif .cd-cat-val{color:var(--coral);}
+  .cd-total{background:var(--grad-signature);color:#fff;border-radius:14px;margin:12px 16px 0;padding:12px;text-align:center;box-shadow:var(--shadow-sm);}
+  .cd-total-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;opacity:.85;}
+  .cd-total-val{font-family:var(--font-display);font-size:19px;font-weight:700;margin-top:2px;}
+  .cd-section{border-top:1px solid var(--line);}
+  .cd-section-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;
+    cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+  .cd-section-head .car{transition:transform .15s;color:var(--ink-faint);}
+  .cd-section-head.open .car{transform:rotate(180deg);}
+  .cd-section-body{display:none;padding:0 16px 14px;}
+  .cd-section-body.open{display:block;}
+  .cd-item{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+  .cd-item:last-child{border-bottom:none;}
+  .cd-item .plate{font-weight:700;}
+  .cd-item .meta{color:var(--ink-faint);font-size:11.5px;}
+
+  .stat-grid-3{grid-template-columns:repeat(3,1fr);}
 
   @media (max-width:640px){
-    .tt-row{grid-template-columns:24px 1fr 70px;grid-template-areas:"rank name days" ". plat plat" ". lastpay lastpay" ". outstanding deposit";row-gap:2px;padding:10px;}
-    .tt-head{display:none;}
-    .tt-rank{grid-area:rank;}
-    .tt-name{grid-area:name;}
-    .tt-days{grid-area:days;justify-self:end;}
-    .tt-plat{grid-area:plat;font-size:12px;}
-    .tt-lastpay{grid-area:lastpay;font-size:11.5px;}
-    .tt-outstanding{grid-area:outstanding;text-align:left;font-size:12.5px;}
-    .tt-deposit{grid-area:deposit;text-align:right;font-size:11px;}
-    .tt-mobile-label{display:inline;font-weight:400;color:var(--ink-faint);}
-    .tt-outstanding .tt-mobile-label{font-weight:600;color:var(--ink-faint);}
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    .stat-grid-3{grid-template-columns:repeat(3,1fr);}
+    .stat .val{font-size:18px;}
+    h1{font-size:22px;}
+    .topbar-inner{font-size:11px;gap:6px;}
+    .topbar-note{font-size:10.5px;max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .theme-toggle{padding:3px 9px;font-size:10px;margin-left:6px;}
+    .cal-month-label{min-width:0;font-size:13px;}
+    .cal-nav{gap:10px;}
+    .cal-day{border-radius:8px;font-size:10px;}
+    .cal-day .n{font-size:10px;}
+    .cd-cats{gap:6px;}
+    .cd-cat{padding:9px 6px;border-radius:10px;}
+    .cd-cat-val{font-size:16px;}
+    .cd-stats{gap:12px;padding:0 14px 12px;}
+    .cd-title{font-size:16px;padding:14px 14px 10px;}
+    table{font-size:11.5px;}
+    th{padding:8px 8px;font-size:9.5px;}
+    td{padding:8px 8px;}
+    .tab{padding:8px 14px;font-size:12.5px;}
+  }
+  @media (max-width:380px){
+    .cd-cats{grid-template-columns:1fr 1fr 1fr;}
+    .topbar-note{display:none;}
   }
 
-  .roster-section{margin-top:14px;}
-  .roster-section:first-child{margin-top:0;}
-  .section-toggle{
-    display:flex;align-items:center;justify-content:space-between;width:100%;
-    border:none;background:transparent;padding:4px 0;cursor:pointer;
-    font-family:var(--font-sans);touch-action:manipulation;
-  }
-  .section-toggle-title{
-    font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;
-  }
-  .section-toggle-arrow{
-    color:var(--ink-faint);font-size:30px;line-height:1;transition:transform 0.15s;
-  }
-  .section-toggle.open .section-toggle-arrow{transform:rotate(180deg);}
-  .section-content{display:none;margin-top:6px;}
-  .section-content.open{display:block;}
-  .section-empty{font-size:13px;color:var(--ink-faint);padding:6px 0;}
+  .lap-range-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;font-size:12.5px;
+    color:var(--ink-soft);font-weight:600;}
+  .lap-range-row label{display:flex;align-items:center;gap:6px;}
+  .lap-range-row input[type=date]{border:1.5px solid var(--line);border-radius:10px;padding:6px 9px;
+    font-family:var(--font-sans);font-size:12.5px;background:var(--panel);color:var(--ink);}
+  .pdf-btn{margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:999px;
+    padding:9px 18px;font-family:var(--font-display);font-weight:700;font-size:12.5px;cursor:pointer;
+    box-shadow:var(--shadow-sm);transition:transform .12s;}
+  .pdf-btn:hover{transform:translateY(-1px);}
 
-  .pyramid{margin:1rem 0;}
-  .pyramid-top{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-  }
-  .pyramid-box{
-    border-radius:var(--radius);padding:12px 14px;text-align:center;
-    border:1px solid var(--line);
-  }
-  .pyramid-box .p-label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
-  .pyramid-box .p-value{font-family:var(--font-mono);font-size:20px;font-weight:700;}
-  .pb-active{background:#E3F5E9;}
-  .pb-active .p-value{color:#1E7A45;}
-  .pb-bengkel{background:#FCEBEB;}
-  .pb-bengkel .p-value{color:#B03A3A;}
-  .pb-inaktif{background:#FDF3D9;}
-  .pb-inaktif .p-value{color:#9A7B0A;}
-  .pyramid-connector{
-    width:2px;height:16px;background:var(--line);margin:0 auto;
-  }
-  .pyramid-total{
-    border-radius:var(--radius);padding:14px;text-align:center;
-    background:var(--accent-strong);
-  }
-  .pyramid-total .p-label{font-size:11px;color:var(--bg);opacity:0.85;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
-  .pyramid-total .p-value{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--bg);}
-
-  @media (max-width:480px){
-    .pyramid-top{grid-template-columns:1fr 1fr;}
-    .pb-inaktif{grid-column:1 / 3;}
-    .pyramid-box .p-value{font-size:17px;}
-  }
-
-  .legend{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;font-size:12.5px;color:var(--ink-soft);}
-  .legend .chips{display:flex;gap:2px;}
-  .legend .chip{width:18px;height:14px;border-radius:2px;}
-
-  .occ-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;font-size:13px;color:var(--ink-soft);}
-  .switch{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0;}
-  .switch input{opacity:0;width:0;height:0;}
-  .switch-slider{
-    position:absolute;cursor:pointer;inset:0;background:var(--line);
-    border-radius:999px;transition:background 0.15s;
-  }
-  .switch-slider::before{
-    content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;
-    background:var(--panel);border-radius:50%;transition:transform 0.15s;
-  }
-  .switch input:checked + .switch-slider{background:var(--accent);}
-  .switch input:checked + .switch-slider::before{transform:translateX(16px);}
-
-  .months{
-    display:grid;
-    grid-template-rows:repeat(2, auto);
-    grid-auto-flow:column;
-    grid-auto-columns:calc(50% - 8px);
-    gap:16px;
-    overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    scrollbar-width:thin;
-    padding-bottom:4px;
-  }
-  .month-card{
-    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:14px;overflow:hidden;scroll-snap-align:start;order:var(--order-desktop, 0);
-  }
-  .month-title{font-family:var(--font-display);font-size:16px;color:var(--accent-strong);margin-bottom:10px;}
-  .daynames{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
-  .daynames span{font-size:10px;text-align:center;color:var(--ink-faint);}
-  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-  .day{
-    aspect-ratio:1;border-radius:5px;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;cursor:default;font-size:10px;
-    border:1px solid transparent;transition:transform 0.1s;touch-action:manipulation;
-    overflow:hidden;min-width:0;
-  }
-  .day.has-data{cursor:pointer;}
-  .day.has-data:hover{transform:scale(1.08);z-index:2;}
-  .day.has-data:active{transform:scale(0.95);}
-  .day.empty{background:var(--bg);}
-  .day-num{font-size:9px;opacity:0.8;white-space:nowrap;}
-  .day-val{font-size:12px;font-weight:600;margin-top:1px;white-space:nowrap;}
-  .day-sub{font-size:11px;opacity:0.8;margin-top:1px;white-space:nowrap;}
-  .day.nodata{background:transparent;border:1px dashed var(--line);color:var(--ink-faint);}
-
-  .detail{
-    margin-top:1.5rem;background:var(--bg);border:2px solid var(--line);
-    border-radius:var(--radius);padding:1rem 1.25rem;display:none;
-    box-shadow:0 12px 32px rgba(4,52,44,0.14), 0 4px 10px rgba(4,52,44,0.08);
-  }
-  .detail.show{display:block;}
-  .detail .d-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--accent-strong);margin-bottom:10px;}
-  .detail .d-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
-  .detail .d-item .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;}
-  .detail .d-item .value{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--ink);margin-top:2px;}
-  .value-pct{font-size:12px;font-weight:500;color:var(--ink-faint);}
-
-  #detailRoster{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
-  .roster-title{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
-  .roster-row{
-    display:grid;grid-template-columns:22px 90px 120px 1fr;gap:8px;
-    padding:6px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:center;
-  }
-  .roster-row:last-child{border-bottom:none;}
-  .roster-num{font-family:var(--font-mono);color:var(--ink-faint);font-size:12px;text-align:right;}
-  .roster-plat{font-family:var(--font-mono);font-weight:600;color:var(--accent-strong);font-size:12.5px;}
-  .roster-vehicle{color:var(--ink-soft);font-size:12.5px;}
-  .roster-name{color:var(--ink);font-size:12.5px;}
-
-  @media (max-width:480px){
-    .roster-row{
-      grid-template-columns:18px 1fr;grid-template-rows:auto auto;gap:2px 8px;
-      padding:8px 0;
-    }
-    .roster-num{grid-column:1;grid-row:1;align-self:start;padding-top:2px;}
-    .roster-plat{grid-column:2;font-size:13px;}
-    .roster-vehicle{grid-column:2;font-size:11.5px;}
-    .roster-name{grid-column:2;font-size:12px;color:var(--ink-soft);}
-  }
-  .tag-warn{
-    background:var(--warn-soft);color:var(--warn);font-size:10px;font-weight:600;
-    padding:2px 6px;border-radius:999px;margin-left:6px;text-transform:uppercase;
-  }
-  .calc-line{
-    display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
-    font-family:var(--font-mono);font-size:15px;color:var(--ink);
-  }
-  .calc-num{font-weight:600;}
-  .calc-op{color:var(--ink-faint);font-size:14px;}
-  .calc-result{font-weight:700;color:var(--accent-strong);font-size:16px;}
-  .tx-count{font-size:11px;color:var(--ink-faint);font-weight:400;}
-  @media (max-width:480px){
-    .calc-line{font-size:13px;}
-    .calc-result{font-size:14px;}
-  }
-
-  footer{margin-top:2.5rem;font-size:12px;color:var(--ink-faint);border-top:1px solid var(--line);padding-top:1rem;}
-
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#15181A; --panel:#1D2224; --ink:#E7E9E4; --ink-soft:#A6ADA5;
-      --ink-faint:#767D75; --line:#2C3230; --accent:#4CC9A5; --accent-soft:#0E2E27;
-      --accent-strong:#9FE1CB; --warn:#E7A0A0; --warn-soft:#3A1E1E;
-    }
-  }
-
-  @media (max-width:480px){
-    .wrap{padding-top:1.75rem;padding-left:1rem;padding-right:1rem;}
-    h1{font-size:26px;}
-    .sub{font-size:13.5px;}
-    .day-num{font-size:8px;}
-    .day-val{font-size:11px;}
-    .day-sub{font-size:9px;}
-    .stat .value{font-size:17px;}
-    .month-card{padding:10px;}
-
-    .controls{width:100%;}
-    .seg{
-      display:flex;flex-wrap:wrap;width:100%;box-sizing:border-box;
-    }
-    .seg button{
-      flex:1 1 auto;text-align:center;font-size:12px;padding:9px 8px;
-      white-space:normal;
-    }
-    .update-note{width:100%;order:2;}
-    .refresh-btn{order:3;}
-
-    .swipe-hint{
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      color:var(--ink-faint);font-size:12.5px;margin-bottom:10px;
-    }
-    .swipe-hint-icon{
-      width:30px;height:16px;color:var(--accent);
-      animation:swipeHintMove 1.6s ease-in-out infinite;
-    }
-    @keyframes swipeHintMove{
-      0%, 100%{ transform:translateX(-4px); opacity:0.55; }
-      50%{ transform:translateX(4px); opacity:1; }
-    }
-
-    .tap-hint{
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      color:var(--ink-faint);font-size:12.5px;margin:14px 0 4px;
-    }
-    .tap-hint-icon{
-      width:20px;height:20px;color:var(--accent);
-      animation:tapHintPulse 1.4s ease-in-out infinite;
-    }
-    @keyframes tapHintPulse{
-      0%, 100%{ transform:scale(0.85); opacity:0.6; }
-      50%{ transform:scale(1.05); opacity:1; }
-    }
-
-    .months{
-      display:flex;
-      overflow-x:auto;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      gap:0;
-      margin:0 -1rem;
-      padding:0 1rem;
-      scrollbar-width:none;
-    }
-    .months::-webkit-scrollbar{display:none;}
-    .month-card{
-      flex:0 0 100%;
-      scroll-snap-align:center;
-      scroll-snap-stop:always;
-      order:var(--order-mobile, 0);
-    }
-  }
+  .report-month-section{margin-bottom:22px;}
+  .report-month-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin:0 0 10px;color:var(--ink);}
+  .report-cal-row{display:flex;flex-wrap:nowrap;gap:14px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px;max-width:100%;}
+  .report-cal-item{flex:0 0 auto;width:212px;overflow:hidden;}
+  .report-cal-item .cal-month-block{padding:10px;}
+  .report-cal-item .cal-grid{gap:2px;}
+  .report-cal-item .cal-weekday{font-size:7.5px;}
+  .report-cal-item .cal-day{font-size:8.5px;border-radius:5px;}
+  .cal-day .sym{font-size:7.5px;font-weight:800;line-height:1;margin-top:1px;opacity:.9;}
+  .report-cal-item .cal-day .sym{font-size:6.5px;}
+  .report-cal-item .cal-day .n{font-size:8.5px;}
+  .report-cal-item-label{font-family:var(--font-display);font-size:11.5px;font-weight:700;text-align:center;
+    margin-bottom:6px;color:var(--ink-soft);}
+  .report-cal-wrap{margin-bottom:0;}
+  .report-legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-soft);margin-bottom:12px;}
+  .report-legend span{display:inline-flex;align-items:center;gap:5px;}
+  .report-legend i{width:15px;height:15px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;
+    font-style:normal;font-size:9px;font-weight:800;}
 </style>
 </head>
 <body>
+<div class="signature-bar"></div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="pulse-dot"></span>
+    <span class="live-label">LIVE</span>
+    <span class="topbar-note" id="genNote">Menghubungkan ke Google Sheets...</span>
+    <button class="theme-toggle" id="themeToggle">Dark</button>
+  </div>
+</div>
 <div class="wrap">
-
   <header>
-    <div class="eyebrow">GO MOREN — Rekap Sewa Supir</div>
-    <h1>Kalender operasional armada</h1>
+    <div class="eyebrow">Moren &middot; Fleet Operations</div>
+    <h1>Dashboard Operasional</h1>
   </header>
 
-  <div class="controls">
-    <div class="seg" id="viewSwitch">
-      <button data-view="active" class="active">Mobil aktif (kontrak)</button>
-      <button data-view="per_car">Rp / mobil aktif</button>
-      <button data-view="tunggakan">Tunggakan Driver</button>
-    </div>
-    <span class="update-note">Data update terakhir: 24 Juli 2026</span>
+  <div class="tabs main-tabs">
+    <div class="tab active" data-tab="overview">Overview</div>
+    <div class="tab" data-tab="kalender">Kalender</div>
+    <div class="tab" data-tab="driver">Driver</div>
+    <div class="tab" data-tab="mobil">Mobil</div>
+    <div class="tab" data-tab="laporan-mobil">Laporan per Mobil</div>
+    <div class="tab" data-tab="laporan-driver">Laporan per Driver</div>
+    <div class="tab" data-tab="hari-libur">Hari Libur</div>
+    <div class="tab" data-tab="bengkel">Bengkel</div>
+    <div class="tab" data-tab="award">Driver of the Month</div>
   </div>
 
-  <div class="stat-row" id="statRow"></div>
-
-  <div id="calendarSection">
-    <div class="legend">
-      <span id="legendLabelLow">Sedikit</span>
-      <div class="chips" id="legendChips"></div>
-      <span id="legendLabelHigh">Banyak</span>
+  <div id="tab-overview"></div>
+  <div id="tab-kalender" style="display:none">
+    <div class="cal-nav">
+      <button class="cal-nav-btn" id="calPrev">&larr;</button>
+      <div class="cal-month-label" id="calMonthLabel"></div>
+      <button class="cal-nav-btn" id="calNext">&rarr;</button>
     </div>
-
-    <div class="occ-toggle-row">
-      <label class="switch">
-        <input type="checkbox" id="bengkelToggle" checked>
-        <span class="switch-slider"></span>
-      </label>
-      <span class="occ-toggle-label">Okupansi sertakan mobil rusak (bengkel)</span>
+    <div class="cal-legend">
+      <span>Sedikit</span>
+      <div class="cal-legend-chips" id="calLegendChips"></div>
+      <span>Banyak</span>
     </div>
-
-    <div class="swipe-hint">
-      <svg class="swipe-hint-icon" viewBox="0 0 60 32" xmlns="http://www.w3.org/2000/svg">
-        <path d="M6 16h40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M40 8l10 8-10 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M20 8l-10 8 10 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      </svg>
-      <span>Geser untuk ganti bulan</span>
+    <div class="cal-swipe-hint" id="calSwipeHint">&larr; geser untuk ganti bulan &rarr;</div>
+    <div class="cal-hint">Tekan tanggal untuk detail</div>
+    <div class="cal-toggle-row">
+      Total mobil untuk okupansi:
+      <div class="seg">
+        <button id="calTotalAll" class="active">Definitely All</button>
+        <button id="calTotalExclBengkel">Exclude Bengkel</button>
+      </div>
     </div>
-
-    <div class="months" id="months"></div>
-
-    <div class="tap-hint">
-      <svg class="tap-hint-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="16" cy="16" r="6" fill="currentColor"/>
-        <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="2" fill="none" opacity="0.5"/>
-      </svg>
-      <span>Tekan tanggal untuk detail</span>
+    <div class="cal-multi" id="calMulti"></div>
+    <div class="card" id="calDetail" style="display:none;margin-top:14px">
     </div>
+  </div>
+  <div id="tab-driver" style="display:none">
+    <div class="tabs">
+      <div class="tab status-tab active" data-status="Aktif" style="flex:1;text-align:center">Aktif</div>
+      <div class="tab status-tab" data-status="Selesai" style="flex:1;text-align:center">Selesai</div>
+    </div>
+    <input id="search-driver" type="text" placeholder="Cari nama driver / mobil...">
+    <div class="card"><div class="table-scroll" id="table-driver"></div></div>
+  </div>
+  <div id="tab-mobil" style="display:none">
+    <input id="search-mobil" type="text" placeholder="Cari plat / model...">
+    <div class="card"><div class="table-scroll" id="table-mobil"></div></div>
+  </div>
+  <div id="tab-laporan-mobil" style="display:none">
+    <select id="lapMobilSelect" style="width:100%;padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);
+      background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:12px;font-family:var(--font-sans);"></select>
+    <div class="lap-range-row">
+      <label>Dari <input type="date" id="lapMobilStart"></label>
+      <label>Sampai <input type="date" id="lapMobilEnd"></label>
+      <button class="pdf-btn" id="lapMobilPdf">Unduh PDF</button>
+    </div>
+    <div class="stat-grid" id="lapMobilStats"></div>
+    <div id="lapMobilReport"></div>
+  </div>
 
-    <div id="dayTooltip" class="day-tooltip"></div>
+  <div id="tab-laporan-driver" style="display:none">
+    <select id="lapDriverSelect" style="width:100%;padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);
+      background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:12px;font-family:var(--font-sans);"></select>
+    <div class="lap-range-row">
+      <label>Dari <input type="date" id="lapDriverStart"></label>
+      <label>Sampai <input type="date" id="lapDriverEnd"></label>
+      <button class="pdf-btn" id="lapDriverPdf">Unduh PDF</button>
+    </div>
+    <div class="stat-grid" id="lapDriverStats"></div>
+    <div id="lapDriverReport"></div>
+  </div>
 
-    <div class="detail" id="detail">
-      <div class="d-title" id="detailTitle"></div>
-      <div class="d-grid" id="detailGrid"></div>
-      <div id="detailPyramid" style="display:none;"></div>
-      <div id="detailRoster" style="display:none;"></div>
+  <div id="tab-hari-libur" style="display:none">
+    <div class="stat-grid stat-grid-3" id="hlStats"></div>
+    <div class="card">
+      <div class="card-title">Libur Hari Ini</div>
+      <div class="table-scroll" id="hlToday"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">7 Hari ke Depan</div>
+      <div class="table-scroll" id="hlUpcoming"></div>
+    </div>
+    <input id="search-hari-libur" type="text" placeholder="Cari nama driver...">
+    <div class="card">
+      <div class="card-title">Semua Riwayat Libur</div>
+      <div class="table-scroll" id="hlAll"></div>
     </div>
   </div>
 
-  <div id="tunggakanSection" style="display:none;"></div>
-
-  <footer>Sumber: sheet Recap dan sheet per-driver (kolom "Untuk tanggal" &amp; "Nominal"), GO MOREN REKAP SEWA SUPIR.xlsx. Data beberapa hari terakhir menjelang 19 Juli kemungkinan belum lengkap karena lag pelaporan setoran.</footer>
+  <div id="tab-bengkel" style="display:none">
+    <div class="card">
+      <div class="card-title">Sedang Berlangsung</div>
+      <div class="table-scroll" id="table-bengkel-ongoing"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Sudah Selesai</div>
+      <div class="table-scroll" id="table-bengkel-done"></div>
+    </div>
+  </div>
+  <div id="tab-award" style="display:none">
+    <div class="card"><div class="table-scroll" id="table-award"></div></div>
+  </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
-const DATA = {"2026-04-01":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-02":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-03":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-04":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-05":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-06":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-07":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-08":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-09":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-10":{"setoran":0,"active":0,"revenue":0,"per_car":0,"total_fleet":9,"occupancy":0.0},"2026-04-11":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-12":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-13":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-14":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-15":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-16":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-17":{"setoran":1,"active":1,"revenue":350000,"per_car":350000,"total_fleet":9,"occupancy":11.1},"2026-04-18":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-19":{"setoran":2,"active":2,"revenue":700000,"per_car":350000,"total_fleet":9,"occupancy":22.2},"2026-04-20":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-21":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-22":{"setoran":3,"active":3,"revenue":1050000,"per_car":350000,"total_fleet":9,"occupancy":33.3},"2026-04-23":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":9,"occupancy":66.7},"2026-04-24":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-04-25":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-26":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-27":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-28":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-29":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-04-30":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-01":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-02":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-03":{"setoran":9,"active":9,"revenue":3150000,"per_car":350000,"total_fleet":9,"occupancy":100.0},"2026-05-04":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-05":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-06":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-07":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-08":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-09":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-10":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-11":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-12":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-13":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-14":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-15":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-16":{"setoran":8,"active":8,"revenue":2800000,"per_car":350000,"total_fleet":9,"occupancy":88.9},"2026-05-17":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-18":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-19":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-20":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-21":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-22":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-23":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-24":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-25":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-26":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":9,"occupancy":77.8},"2026-05-27":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":9,"occupancy":77.8},"2026-05-28":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":9,"occupancy":77.8},"2026-05-29":{"setoran":6,"active":7,"revenue":2100000,"per_car":300000,"total_fleet":9,"occupancy":77.8},"2026-05-30":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":9,"occupancy":66.7},"2026-05-31":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":9,"occupancy":66.7},"2026-06-01":{"setoran":5,"active":6,"revenue":1750000,"per_car":291667,"total_fleet":9,"occupancy":66.7},"2026-06-02":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":9,"occupancy":55.6},"2026-06-03":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":9,"occupancy":55.6},"2026-06-04":{"setoran":5,"active":5,"revenue":1750000,"per_car":350000,"total_fleet":9,"occupancy":55.6},"2026-06-05":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":9,"occupancy":66.7},"2026-06-06":{"setoran":6,"active":6,"revenue":2100000,"per_car":350000,"total_fleet":9,"occupancy":66.7},"2026-06-07":{"setoran":7,"active":7,"revenue":2450000,"per_car":350000,"total_fleet":14,"occupancy":50.0},"2026-06-08":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":14,"occupancy":57.1},"2026-06-09":{"setoran":8,"active":8,"revenue":2820000,"per_car":352500,"total_fleet":14,"occupancy":57.1},"2026-06-10":{"setoran":9,"active":9,"revenue":3190000,"per_car":354444,"total_fleet":14,"occupancy":64.3},"2026-06-11":{"setoran":12,"active":12,"revenue":4300000,"per_car":358333,"total_fleet":14,"occupancy":85.7},"2026-06-12":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":14,"occupancy":92.9},"2026-06-13":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":14,"occupancy":92.9},"2026-06-14":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":14,"occupancy":85.7},"2026-06-15":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":18,"occupancy":66.7},"2026-06-16":{"setoran":11,"active":12,"revenue":3930000,"per_car":327500,"total_fleet":18,"occupancy":66.7},"2026-06-17":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":18,"occupancy":72.2},"2026-06-18":{"setoran":12,"active":13,"revenue":4300000,"per_car":330769,"total_fleet":18,"occupancy":72.2},"2026-06-19":{"setoran":13,"active":14,"revenue":4570000,"per_car":326429,"total_fleet":18,"occupancy":77.8},"2026-06-20":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":18,"occupancy":72.2},"2026-06-21":{"setoran":13,"active":13,"revenue":4570000,"per_car":351538,"total_fleet":18,"occupancy":72.2},"2026-06-22":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":18,"occupancy":77.8},"2026-06-23":{"setoran":13,"active":13,"revenue":4470000,"per_car":343846,"total_fleet":18,"occupancy":72.2},"2026-06-24":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":18,"occupancy":77.8},"2026-06-25":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":23,"occupancy":60.9},"2026-06-26":{"setoran":14,"active":14,"revenue":4820000,"per_car":344286,"total_fleet":23,"occupancy":60.9},"2026-06-27":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":23,"occupancy":65.2},"2026-06-28":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-29":{"setoran":15,"active":15,"revenue":5070000,"per_car":338000,"total_fleet":24,"occupancy":62.5},"2026-06-30":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-01":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-02":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-03":{"setoran":15,"active":15,"revenue":5190000,"per_car":346000,"total_fleet":24,"occupancy":62.5},"2026-07-04":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-05":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-06":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-07":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-08":{"setoran":16,"active":16,"revenue":5440000,"per_car":340000,"total_fleet":24,"occupancy":66.7},"2026-07-09":{"setoran":17,"active":17,"revenue":5690000,"per_car":334706,"total_fleet":24,"occupancy":70.8},"2026-07-10":{"setoran":16,"active":17,"revenue":5340000,"per_car":314118,"total_fleet":24,"occupancy":70.8},"2026-07-11":{"setoran":16,"active":17,"revenue":5340000,"per_car":314118,"total_fleet":24,"occupancy":70.8},"2026-07-12":{"setoran":16,"active":17,"revenue":5340000,"per_car":314118,"total_fleet":24,"occupancy":70.8},"2026-07-13":{"setoran":15,"active":17,"revenue":4970000,"per_car":292353,"total_fleet":24,"occupancy":70.8},"2026-07-14":{"setoran":15,"active":17,"revenue":4970000,"per_car":292353,"total_fleet":24,"occupancy":70.8},"2026-07-15":{"setoran":14,"active":17,"revenue":4600000,"per_car":270588,"total_fleet":24,"occupancy":70.8},"2026-07-16":{"setoran":13,"active":17,"revenue":4230000,"per_car":248824,"total_fleet":24,"occupancy":70.8},"2026-07-17":{"setoran":13,"active":17,"revenue":4230000,"per_car":248824,"total_fleet":24,"occupancy":70.8},"2026-07-18":{"setoran":13,"active":16,"revenue":4230000,"per_car":264375,"total_fleet":24,"occupancy":66.7},"2026-07-19":{"setoran":10,"active":16,"revenue":3280000,"per_car":205000,"total_fleet":24,"occupancy":66.7},"2026-07-20":{"setoran":9,"active":16,"revenue":2910000,"per_car":181875,"total_fleet":24,"occupancy":66.7},"2026-07-21":{"setoran":9,"active":16,"revenue":2910000,"per_car":181875,"total_fleet":24,"occupancy":66.7},"2026-07-22":{"setoran":7,"active":16,"revenue":2190000,"per_car":136875,"total_fleet":24,"occupancy":66.7},"2026-07-23":{"setoran":6,"active":16,"revenue":1840000,"per_car":115000,"total_fleet":24,"occupancy":66.7},"2026-07-24":{"setoran":2,"active":16,"revenue":520000,"per_car":32500,"total_fleet":24,"occupancy":66.7}};
-
-const ACTIVE_ADJ_NOTE_MAX_DATE = "2026-07-17";
-const RAMP = ['#E6F1FB','#B5D4F4','#85B7EB','#378ADD','#185FA5','#0C447C'];
-
-// Roster from sheet Recap: name, start, end (null = masih aktif per 17 Jul 2026), status, vehicle, plat
-const VAL_DATE = "2026-07-24";
-// Master list of unique physical cars in the fleet (sheet Recap columns T:W), with the date each
-// car became available/issued, and an optional note (e.g. "bengkel_since_issued" for cars that
-// went straight to the workshop with no driver ever assigned). Used so "Total mobil keseluruhan"
-// only ever grows over time.
-const MASTER_CARS = [
-  {plat:"B 1813 PNR", vehicle:"Omoda E5", issued:"2025-02-19"},
-  {plat:"B 1132 PNT", vehicle:"Omoda E5", issued:"2025-04-14"},
-  {plat:"B 1134 PNT", vehicle:"Omoda E5", issued:"2025-04-14"},
-  {plat:"B 1291 PNT", vehicle:"Omoda E5", issued:"2025-04-24"},
-  {plat:"B 2654 PNO", vehicle:"Wuling Cloud Pro", issued:"2026-06-07"},
-  {plat:"B 2655 PNO", vehicle:"Wuling Cloud Pro", issued:"2026-06-07"},
-  {plat:"B 2657 PNO", vehicle:"Wuling Cloud Pro", issued:"2026-06-07"},
-  {plat:"B 2656 PNO", vehicle:"Wuling Cloud Pro", issued:"2026-06-07"},
-  {plat:"B 2659 PNO", vehicle:"Wuling Cloud Pro", issued:"2026-06-07"},
-  {plat:"B 1139 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
-  {plat:"B 1142 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
-  {plat:"B 1143 PNV", vehicle:"Wuling Cloud", issued:"2025-10-22"},
-  {plat:"B 1141 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
-  {plat:"B 1140 PNV", vehicle:"Wuling Cloud", issued:"2025-10-06"},
-  {plat:"B 1184 PNU", vehicle:"Vf E34", issued:"2026-06-25"},
-  {plat:"B 1185 PNU", vehicle:"Vf E34", issued:"2026-06-25", note:"bengkel_since_issued"},
-  {plat:"B 1182 PNU", vehicle:"Vf E34", issued:"2026-06-25"},
-  {plat:"B 1183 PNU", vehicle:"Vf E34", issued:"2026-06-25", note:"bengkel_since_issued"},
-  {plat:"B 1613 PNU", vehicle:"Vf E34", issued:"2026-06-25", note:"bengkel_since_issued"},
-  {plat:"B 2413 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
-  {plat:"B 2398 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
-  {plat:"B 2396 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
-  {plat:"B 2526 PYD", vehicle:"Stargazer", issued:"2026-06-15"},
-  {plat:"B 2172 PNP", vehicle:"Wuling Cloud Pro", issued:"2026-06-28"}
-];
-
-const ROSTER = [
-  {name:"Florentina Dyah Ayu", start:"2026-04-11", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1291 PNT", lastPay:"2026-07-22", outstanding:0, dailyRate:350000, offDays:0, deposit:1500000},
-  {name:"Daniel Ricardo", start:"2026-04-18", end:"2026-05-16", status:"Inactive", vehicle:"Omoda E5", plat:"B 1132 PNT"},
-  {name:"Tanu Wijaya", start:"2026-04-20", end:"2026-05-03", status:"Inactive", vehicle:"Omoda E5", plat:"B 1134 PNT"},
-  {name:"M. Syaifullah Ilham", start:"2026-04-23", end:"2026-07-17", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1140 PNV"},
-  {name:"Samuel Silalahi", start:"2026-04-23", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1139 PNV", lastPay:"2026-07-21", outstanding:350000, dailyRate:350000, offDays:0, deposit:1100000},
-  {name:"Apriyanto", start:"2026-04-23", end:"2026-06-19", status:"Inactive", vehicle:"Omoda E5", plat:"B 1134 PNT"},
-  {name:"Irfan Prasetyo", start:"2026-04-24", end:"2026-05-29", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1142 PNV"},
-  {name:"Angga Sayidiningrat", start:"2026-04-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1813 PNR", lastPay:"2026-07-18", outstanding:1400000, dailyRate:350000, offDays:0, deposit:770000},
-  {name:"Albertus Fernando", start:"2026-04-25", end:"2026-06-01", status:"Inactive", vehicle:"Wuling Cloud", plat:"B 1141 PNV"},
-  {name:"Fachmi Asri", start:"2026-06-05", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1141 PNV", lastPay:"2026-07-23", outstanding:0, dailyRate:350000, offDays:0, deposit:1500000},
-  {name:"Dicky Aditya", start:"2026-06-08", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2657 PNO", lastPay:"2026-07-21", outstanding:370000, dailyRate:370000, offDays:1, deposit:1500000},
-  {name:"Susanto", start:"2026-06-07", end:null, status:"Bengkel", vehicle:"Wuling Cloud", plat:"B 1142 PNV", bengkelStart:"2026-06-23"},
-  {name:"Cahyo Herdianto", start:"2026-06-10", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2654 PNO", lastPay:"2026-07-23", outstanding:0, dailyRate:370000, offDays:0, deposit:1500000},
-  {name:"Achmad Ramdani", start:"2026-06-11", end:"2026-06-13", status:"Inactive", vehicle:"Wuling Cloud Pro", plat:"B 2659 PNO"},
-  {name:"Iman Sunardi", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2656 PNO", lastPay:"2026-07-12", outstanding:3700000, dailyRate:370000, offDays:3, deposit:1500000},
-  {name:"Krisna Respati", start:"2026-06-11", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2655 PNO", lastPay:"2026-07-14", outstanding:2960000, dailyRate:370000, offDays:3, deposit:1500000},
-  {name:"Ridwan Rustandi", start:"2026-06-12", end:null, status:"Active", vehicle:"Wuling Cloud", plat:"B 1143 PNV", lastPay:"2026-07-18", outstanding:1400000, dailyRate:350000, offDays:0, deposit:1500000},
-  {name:"Ardy Maulana", start:"2026-06-24", end:null, status:"Active", vehicle:"Omoda E5", plat:"B 1134 PNT", lastPay:"2026-07-23", outstanding:0, dailyRate:350000, offDays:0, deposit:1500000},
-  {name:"Johan Charles", start:"2026-06-27", end:null, status:"Bengkel", vehicle:"Vf E34", plat:"B 1184 PNU", bengkelStart:"2026-06-30"},
-  {name:"Christian Yanto", start:"2026-07-09", end:null, status:"Active", vehicle:"Vf E34", plat:"B 1182 PNU", lastPay:"2026-07-24", outstanding:0, dailyRate:250000, offDays:0, deposit:1500000},
-  {name:"Holin Ibrahim", start:"2026-06-17", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2659 PNO", lastPay:"2026-07-15", outstanding:3330000, dailyRate:370000, offDays:0, deposit:1500000},
-  {name:"Ujang Endi Ruswandi", start:"2026-06-22", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2398 PYD", lastPay:"2026-07-18", outstanding:1750000, dailyRate:250000, offDays:0, deposit:1000000},
-  {name:"Renny Lestari", start:"2026-06-19", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2413 PYD", lastPay:"2026-07-24", outstanding:270000, dailyRate:270000, offDays:0, deposit:1000000},
-  {name:"Reliandra Fachri", start:"2026-06-30", end:null, status:"Active", vehicle:"Wuling Cloud Pro", plat:"B 2172 PNP", lastPay:"2026-07-19", outstanding:1110000, dailyRate:370000, offDays:0, deposit:1060000},
-  {name:"Azis Saepuloh", start:"2026-07-04", end:null, status:"Active", vehicle:"Stargazer", plat:"B 2396 PYD", lastPay:"2026-07-23", outstanding:0, dailyRate:250000, offDays:0, deposit:1000000},
-  {name:"(Tidak ada driver)", start:"2026-05-17", end:null, status:"Bengkel", vehicle:"Omoda E5", plat:"B 1132 PNT", bengkelStart:"2026-05-17"}
-];
-
-const TX_BY_DATE = {"2026-04-01":[],"2026-04-02":[],"2026-04-03":[],"2026-04-04":[],"2026-04-05":[],"2026-04-06":[],"2026-04-07":[],"2026-04-08":[],"2026-04-09":[],"2026-04-10":[],"2026-04-11":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-12":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-13":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-14":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-15":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-16":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-17":[{"name":"Florentina Dyah Ayu","total":350000,"count":1}],"2026-04-18":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1}],"2026-04-19":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1}],"2026-04-20":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1}],"2026-04-21":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1}],"2026-04-22":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1}],"2026-04-23":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1}],"2026-04-24":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-04-25":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-04-26":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-04-27":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-04-28":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-04-29":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-04-30":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-01":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-02":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-03":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"Tanu Wijaya","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-04":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-05":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-06":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-07":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-08":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-09":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-10":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-11":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-12":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-13":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-14":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-15":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-16":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Daniel Ricardo","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-17":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-18":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-19":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-20":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-21":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-22":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-23":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-24":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-25":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-26":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Albertus Fernando","total":350000,"count":1}],"2026-05-27":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-05-28":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-05-29":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Irfan Prasetyo","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-05-30":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-05-31":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-06-01":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-06-02":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-06-03":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-06-04":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1}],"2026-06-05":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1}],"2026-06-06":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1}],"2026-06-07":[{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1}],"2026-06-08":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1}],"2026-06-09":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1}],"2026-06-10":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1}],"2026-06-11":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Achmad Ramdani","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Apriyanto","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1}],"2026-06-12":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Achmad Ramdani","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-13":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Achmad Ramdani","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-14":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-15":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-16":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-17":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-18":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1}],"2026-06-19":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1}],"2026-06-20":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1}],"2026-06-21":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1}],"2026-06-22":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Susanto","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-23":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-24":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-25":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-26":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-27":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Johan Charles","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-28":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Johan Charles","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-29":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Johan Charles","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-06-30":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-07-01":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-07-02":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-07-03":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1}],"2026-07-04":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-05":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-06":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-07":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-08":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-09":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"M. Syaifullah Ilham","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-10":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-11":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-12":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Iman Sunardi","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-13":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-14":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Krisna Respati","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-15":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Holin Ibrahim","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-16":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-17":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-18":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Angga Sayidiningrat","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ridwan Rustandi","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Ujang Endi Ruswandi","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-19":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Reliandra Fachri","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-20":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-21":[{"name":"Dicky Aditya","total":370000,"count":1},{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Samuel Silalahi","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-22":[{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Florentina Dyah Ayu","total":350000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-23":[{"name":"Cahyo Herdianto","total":370000,"count":1},{"name":"Fachmi Asri","total":350000,"count":1},{"name":"Ardy Maulana","total":350000,"count":1},{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1},{"name":"Azis Saepuloh","total":250000,"count":1}],"2026-07-24":[{"name":"Renny Lestari","total":270000,"count":1},{"name":"Christian Yanto","total":250000,"count":1}]};
-
-function activeVehiclesOn(dateKey){
-  return ROSTER.filter(r=>{
-    const end = r.end || VAL_DATE;
-    return dateKey >= r.start && dateKey <= end;
-  });
-}
-
-let includeBengkelInOccupancy = true;
-
-function getFleetBreakdown(key){
-  const vehicles = activeVehiclesOn(key);
-  const normalVehicles = vehicles.filter(v => !(v.bengkelStart && key >= v.bengkelStart));
-  const bengkelVehicles = vehicles.filter(v => v.bengkelStart && key >= v.bengkelStart);
-
-  const occupiedKeys = new Set([...normalVehicles, ...bengkelVehicles].map(v => v.plat + '|' + v.vehicle));
-  const issuedCars = MASTER_CARS.filter(c => c.issued <= key);
-  const unassigned = issuedCars.filter(c => !occupiedKeys.has(c.plat + '|' + c.vehicle));
-  const unassignedBengkel = unassigned.filter(c => c.note === 'bengkel_since_issued');
-  const inactiveVehicles = unassigned.filter(c => c.note !== 'bengkel_since_issued');
-  const allBengkelVehicles = [...bengkelVehicles, ...unassignedBengkel];
-
-  const totalFleet = issuedCars.length;
-  const denom = includeBengkelInOccupancy ? totalFleet : (totalFleet - allBengkelVehicles.length);
-  const occupancy = denom > 0 ? (normalVehicles.length / denom * 100) : 0;
-
-  const denomIncl = totalFleet;
-  const denomExcl = totalFleet - allBengkelVehicles.length;
-  const occupancyIncl = denomIncl > 0 ? (normalVehicles.length / denomIncl * 100) : 0;
-  const occupancyExcl = denomExcl > 0 ? (normalVehicles.length / denomExcl * 100) : 0;
-
-  return { normalVehicles, bengkelVehicles, unassignedBengkel, allBengkelVehicles, inactiveVehicles, totalFleet, denom, occupancy, occupancyIncl, occupancyExcl };
-}
-
-const VIEWS = {
-  setoran: { key: 'setoran', label: 'mobil setor', max: 17, fmt: v => v, unit: '' },
-  active: { key: 'active', label: 'okupansi', max: 100, fmt: v => v.toFixed(0) + '%', unit: '' },
-  per_car: { key: 'per_car', label: 'pendapatan / mobil', max: 370000, fmt: v => Math.round(v/1000) + 'k', unit: '' }
-};
-
-function getValue(dateKey, viewKey){
-  const d = DATA[dateKey];
-  if(!d) return undefined;
-  if(viewKey === 'setoran') return d.setoran;
-  if(viewKey === 'active') return getFleetBreakdown(dateKey).occupancy;
-  if(viewKey === 'per_car') return d.per_car;
-}
-
-const months = [
-  {name:'April 2026', y:2026, m:4},
-  {name:'Mei 2026', y:2026, m:5},
-  {name:'Juni 2026', y:2026, m:6},
-  {name:'Juli 2026', y:2026, m:7}
-];
-const dayNames = ['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
-
-let currentView = 'active';
-let lastShownKey = null;
-
-function textColorFor(idx){ return idx>=3 ? '#fff' : '#042C53'; }
-
-function buildLegend(){
-  const chips = document.getElementById('legendChips');
-  chips.innerHTML = '';
-  RAMP.forEach(c=>{
-    const s = document.createElement('span');
-    s.className='chip'; s.style.background=c;
-    chips.appendChild(s);
-  });
-}
-
-function buildStats(){
-  const vals = Object.keys(DATA).map(k=>getValue(k,currentView)).filter(v=>v!==undefined && v>0);
-  const sum = vals.reduce((a,b)=>a+b,0);
-  const avg = vals.length ? sum/vals.length : 0;
-  const max = vals.length ? Math.max(...vals) : 0;
-  const min = vals.length ? Math.min(...vals) : 0;
-
-  let statHtml = '';
-  if(currentView === 'per_car'){
-    statHtml += stat('Rata-rata', 'Rp' + Math.round(avg).toLocaleString('id-ID'));
-    statHtml += stat('Tertinggi', 'Rp' + Math.round(max).toLocaleString('id-ID'));
-    statHtml += stat('Terendah', 'Rp' + Math.round(min).toLocaleString('id-ID'));
-  } else if(currentView === 'active'){
-    const activeVals = Object.keys(DATA).map(k=>DATA[k].active).filter(v=>v>0);
-    const activeAvg = activeVals.length ? activeVals.reduce((a,b)=>a+b,0)/activeVals.length : 0;
-    statHtml += stat('Rata-rata Okupansi', avg.toFixed(1) + '%');
-    statHtml += stat('Tertinggi Okupansi', max.toFixed(1) + '%');
-    statHtml += stat('Terendah Okupansi', min.toFixed(1) + '%');
-    statHtml += stat('Rata-rata Mobil Aktif', Math.round(activeAvg*10)/10 + ' mobil', true);
-  } else {
-    statHtml += stat('Rata-rata', Math.round(avg*10)/10 + ' mobil');
-    statHtml += stat('Tertinggi', max + ' mobil');
-    statHtml += stat('Terendah', min + ' mobil');
+// ---------- Theme toggle ----------
+(function(){
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  function currentTheme(){
+    const saved = localStorage.getItem('moren-theme');
+    if(saved) return saved;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
-  document.getElementById('statRow').innerHTML = statHtml;
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    btn.textContent = theme === 'dark' ? 'Light' : 'Dark';
+  }
+  apply(currentTheme());
+  btn.addEventListener('click', ()=>{
+    const next = currentTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('moren-theme', next);
+    apply(next);
+  });
+})();
+
+let DATA = null;
+const REFRESH_MS = 20000; // poll every 20 seconds
+
+function fmt(n){ if(n===null||n===undefined||n==='') return '-'; return 'Rp' + Math.round(n).toLocaleString('id-ID'); }
+function daysSince(dateStr){
+  if(!dateStr) return null;
+  const d = new Date(dateStr);
+  const now = new Date();
+  return Math.floor((now - d) / (1000*60*60*24));
 }
-function stat(label, value, secondary){
-  return '<div class="stat'+(secondary?' stat-secondary':'')+'"><div class="label">'+label+'</div><div class="value">'+value+'</div></div>';
+function pillFor(text, kind){
+  const cls = {green:'p-green',gray:'p-gray',amber:'p-amber',red:'p-red',blue:'p-blue'}[kind] || 'p-gray';
+  return '<span class="pill '+cls+'">'+text+'</span>';
+}
+
+async function loadData(){
+  try{
+    const res = await fetch('/api/data');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if(json.error) throw new Error(json.error);
+    DATA = json;
+    document.getElementById('genNote').textContent = 'Live dari Google Sheets - update terakhir ' + new Date(DATA.generated).toLocaleTimeString('id-ID') + ' (auto-refresh tiap 20 detik)';
+    renderAll();
+  }catch(err){
+    document.getElementById('genNote').textContent = 'Gagal ambil data: ' + err.message + ' - mencoba lagi otomatis...';
+    console.error(err);
+  }
+}
+
+function renderAll(){
+  if(!DATA) return;
+  renderOverview();
+  renderCalendar();
+  renderDriverTable(document.getElementById('search-driver').value);
+  renderMobilTable(document.getElementById('search-mobil').value);
+  renderLaporanMobil();
+  renderLaporanDriver();
+  renderHariLibur(document.getElementById('search-hari-libur').value);
+  renderBengkelTable();
+  renderAwardTable();
+}
+
+// ---------- Tabs ----------
+document.querySelectorAll('.main-tabs .tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.main-tabs .tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    ['overview','kalender','driver','mobil','laporan-mobil','laporan-driver','hari-libur','bengkel','award'].forEach(id=>{
+      document.getElementById('tab-'+id).style.display = (id===t.dataset.tab)?'block':'none';
+    });
+  });
+});
+
+// ---------- Overview ----------
+let overviewPeriod = '1W';
+function setOverviewPeriod(p){ overviewPeriod = p; renderOverview(); }
+function periodDays(p){ return {'1D':1,'1W':7,'1M':30,'1Y':365}[p] || 7; }
+
+function renderOverview(){
+  if(!DATA) return;
+  const el = document.getElementById('tab-overview');
+  const driversActive = DATA.drivers.filter(d=>d.status_driver==='Aktif');
+  const mobilReady = DATA.mobil.filter(m=>!m.issued_dt || m.issued_dt <= todayISO());
+  const mobilInaktif = mobilReady.filter(m=>m.status_mobil==='Inaktif');
+  const mobilRentable = mobilReady.filter(m=>m.status_mobil!=='Operational Use');
+  const mobilActive = mobilRentable.filter(m=>m.status_mobil==='Aktif');
+  const mobilBengkel = DATA.mobil.filter(m=>m.status_mobil==='Bengkel');
+  const mobilBooked = DATA.mobil.filter(m=>m.status_kontrak==='Booked');
+  const totalSetoran = DATA.penugasan.reduce((s,p)=>s+(p.setoran_total||0),0);
+  const totalDepositHangus = DATA.drivers.reduce((s,d)=>s+(d.deposit_hangus||0),0);
+  const idleAssignments = DATA.penugasan.filter(p=>p.status==='Aktif' && p.produktivitas==='Idle');
+  const driverMap = {};
+  DATA.drivers.forEach(d=>driverMap[d.driver_id]=d);
+  const allActiveWithOut = DATA.penugasan
+    .filter(p=>p.status==='Aktif')
+    .map(p=>({ ...p, out: computeOutstanding(p.nama_driver, p.plat_nomor, p.tarif_harian), dr: driverMap[p.driver_id] || {} }));
+  const overduePartial = allActiveWithOut.filter(p=>p.out.days!==null && p.out.days>3);
+  const noOutstanding = allActiveWithOut.filter(p=>p.out.days===0);
+  const kurangDeposit = DATA.drivers.filter(d=>d.status_deposit && d.status_deposit.startsWith('Kurang'));
+  const bengkelOpen = DATA.bengkel.filter(b=>!b.tanggal_keluar);
+
+  const pDays = periodDays(overviewPeriod);
+  const periodEnd = new Date(); periodEnd.setHours(0,0,0,0);
+  const periodStart = new Date(periodEnd); periodStart.setDate(periodStart.getDate() - (pDays-1));
+  let periodTotal = 0, periodDaysWithData = 0, periodPlatesSet = new Set();
+  Object.keys(DATA.daily||{}).forEach(dateStr=>{
+    const d = new Date(dateStr); d.setHours(0,0,0,0);
+    if(d >= periodStart && d <= periodEnd){
+      periodTotal += DATA.daily[dateStr].total_rp || 0;
+      periodDaysWithData++;
+      (DATA.daily[dateStr].mobil_setor||[]).forEach(pl=>periodPlatesSet.add(pl));
+    }
+  });
+  const periodAvgPerDay = pDays>0 ? periodTotal/pDays : 0;
+  const fmtShort = d => d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+
+  el.innerHTML = `
+    <div class="period-row">
+      <div class="period-label">Ringkasan periode: ${fmtShort(periodStart)} &ndash; ${fmtShort(periodEnd)}</div>
+      <div class="period-seg">
+        <button class="${overviewPeriod==='1D'?'active':''}" onclick="setOverviewPeriod('1D')">1D</button>
+        <button class="${overviewPeriod==='1W'?'active':''}" onclick="setOverviewPeriod('1W')">1W</button>
+        <button class="${overviewPeriod==='1M'?'active':''}" onclick="setOverviewPeriod('1M')">1M</button>
+        <button class="${overviewPeriod==='1Y'?'active':''}" onclick="setOverviewPeriod('1Y')">1Y</button>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="lbl">Setoran Periode Ini</div><div class="val good">${fmt(periodTotal)}</div></div>
+      <div class="stat"><div class="lbl">Rata-rata / Hari</div><div class="val">${fmt(periodAvgPerDay)}</div></div>
+      <div class="stat"><div class="lbl">Mobil Setor (Periode)</div><div class="val">${periodPlatesSet.size}</div></div>
+      <div class="stat"><div class="lbl">Hari Ada Transaksi</div><div class="val">${periodDaysWithData} / ${pDays}</div></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="lbl">Driver aktif</div><div class="val good">${driversActive.length}</div></div>
+      <div class="stat"><div class="lbl">Mobil inaktif</div><div class="val">${mobilInaktif.length}</div></div>
+      <div class="stat"><div class="lbl">Mobil aktif</div><div class="val good">${mobilActive.length} / ${mobilRentable.length}</div></div>
+      <div class="stat"><div class="lbl">Mobil di bengkel</div><div class="val ${mobilBengkel.length?'warn':''}">${mobilBengkel.length}</div></div>
+      <div class="stat"><div class="lbl">Total setoran (semua)</div><div class="val good">${fmt(totalSetoran)}</div></div>
+      <div class="stat"><div class="lbl">Total deposit hangus</div><div class="val">${fmt(totalDepositHangus)}</div></div>
+      <div class="stat"><div class="lbl">Penugasan Idle (bengkel)</div><div class="val ${idleAssignments.length?'warn':''}">${idleAssignments.length}</div></div>
+      <div class="stat"><div class="lbl">Outstanding &gt;3 hari</div><div class="val ${overduePartial.length?'bad':''}">${overduePartial.length}</div></div>
+    </div>
+
+    <div class="card card-warn">
+      <div class="card-title">Perlu perhatian</div>
+      <div class="card-sub">Driver dengan outstanding lebih dari 3 hari</div>
+      <div class="table-scroll">
+        <table>
+          <tr><th>Driver</th><th>Mobil</th><th>Outstanding</th><th>Deposit Terkumpul</th></tr>
+          ${overduePartial.length===0 ? '<tr><td colspan="4" class="note">Tidak ada yang outstanding &gt;3 hari saat ini.</td></tr>' :
+            overduePartial.sort((a,b)=>b.out.days-a.out.days).map(p=>`
+            <tr>
+              <td class="name">${p.nama_driver}</td>
+              <td>${p.plat_nomor}<div style="font-size:11px;color:var(--ink-faint);font-weight:400">${p.nama_model||''}</div></td>
+              <td>${pillFor(p.out.days+' hari','red')} <span class="mono" style="font-size:11.5px">${fmt(p.out.balance)}</span></td>
+              <td class="mono">${fmt(p.dr.deposit_terkumpul)}</td>
+            </tr>`).join('')}
+        </table>
+      </div>
+    </div>
+
+    <div class="card card-good">
+      <div class="card-title">Tanpa Outstanding</div>
+      <div class="card-sub">Driver aktif yang setorannya sudah lunas sampai hari ini</div>
+      <div class="table-scroll">
+        <table>
+          <tr><th>Driver</th><th>Mobil</th><th>Deposit Terkumpul</th></tr>
+          ${noOutstanding.length===0 ? '<tr><td colspan="3" class="note">Belum ada driver yang lunas penuh saat ini.</td></tr>' :
+            noOutstanding.sort((a,b)=>a.nama_driver.localeCompare(b.nama_driver)).map(p=>`
+            <tr>
+              <td class="name">${p.nama_driver}</td>
+              <td>${p.plat_nomor}<div style="font-size:11px;color:var(--ink-faint);font-weight:400">${p.nama_model||''}</div></td>
+              <td class="mono">${fmt(p.dr.deposit_terkumpul)}</td>
+            </tr>`).join('')}
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Mobil sedang di bengkel</div>
+      <div class="table-scroll">
+        <table>
+          <tr><th>Plat</th><th>Model</th><th>Masuk sejak</th><th>Alasan</th></tr>
+          ${bengkelOpen.length===0 ? '<tr><td colspan="4" class="note">Tidak ada mobil di bengkel saat ini.</td></tr>' :
+            bengkelOpen.map(b=>`
+            <tr>
+              <td class="name">${b.plat_nomor}</td>
+              <td>${b.jenis_mobil||'-'}</td>
+              <td>${b.tanggal_masuk || b.tanggal_masuk_raw || '-'}</td>
+              <td>${b.alasan||'-'}</td>
+            </tr>`).join('')}
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+let driverStatusFilter = 'Aktif';
+document.querySelectorAll('.status-tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.status-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    driverStatusFilter = t.dataset.status;
+    renderDriverTable(document.getElementById('search-driver').value);
+  });
+});
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function toISO(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+
+function computeOutstanding(namaDriver, platNomor, tarifHarian){
+  const key = namaDriver + '|' + platNomor;
+  const paidThroughStr = DATA.paid_through[key];
+  if(!paidThroughStr) return { days: null, balance: null };
+
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 1);
+  cutoff.setHours(0,0,0,0);
+
+  let cursor = new Date(paidThroughStr);
+  cursor.setDate(cursor.getDate() + 1);
+  cursor.setHours(0,0,0,0);
+
+  const offSet = new Set(DATA.off_dates[namaDriver] || []);
+  let days = 0;
+  while(cursor <= cutoff){
+    const dateStr = toISO(cursor);
+    const skip = offSet.has(dateStr) || wasInBengkelOnDate(platNomor, dateStr);
+    if(!skip) days++;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  days = Math.max(0, days);
+  return { days, balance: days * (tarifHarian || 0) };
+}
+
+// ---------- Generic sortable table headers ----------
+function toggleSort(stateObj, key, rerenderFn){
+  if(stateObj.key === key) stateObj.dir *= -1;
+  else { stateObj.key = key; stateObj.dir = 1; }
+  rerenderFn();
+}
+function sortArrow(stateObj, key){
+  if(stateObj.key !== key) return '<span class="sort-ic">\u21C5</span>';
+  return stateObj.dir===1 ? '<span class="sort-ic active">\u25B2</span>' : '<span class="sort-ic active">\u25BC</span>';
+}
+function sortTh(label, key, stateObj, handlerName){
+  return `<th class="sortable" onclick="${handlerName}('${key}')">${label}${sortArrow(stateObj,key)}</th>`;
+}
+
+// ---------- Driver tab ----------
+let driverSort = {key:null, dir:1};
+function setDriverSort(key){
+  toggleSort(driverSort, key, ()=>renderDriverTable(document.getElementById('search-driver').value));
+}
+function driverSortValue(key, item){
+  const {p, out, dr} = item;
+  switch(key){
+    case 'nama': return p.nama_driver.toLowerCase();
+    case 'status': return p.status;
+    case 'lastpay': return p.last_installment || '';
+    case 'total': return p.setoran_total || 0;
+    case 'deposit': return dr.deposit_terkumpul || 0;
+    case 'outstanding': return out.days===null ? -1 : out.days;
+    default: return 0;
+  }
+}
+function renderDriverTable(query){
+  if(!DATA) return;
+  const q = (query||'').toLowerCase().trim();
+  const rows = DATA.penugasan.filter(p =>
+    p.status === driverStatusFilter &&
+    (!q || p.nama_driver.toLowerCase().includes(q) || p.plat_nomor.toLowerCase().includes(q))
+  );
+  const container = document.getElementById('table-driver');
+  const driverMap = {};
+  DATA.drivers.forEach(d=>driverMap[d.driver_id]=d);
+
+  let html = '<table><tr>' +
+    sortTh('Driver','nama',driverSort,'setDriverSort') +
+    sortTh('Status','status',driverSort,'setDriverSort') +
+    sortTh('Setoran terakhir','lastpay',driverSort,'setDriverSort') +
+    sortTh('Total setoran','total',driverSort,'setDriverSort') +
+    sortTh('Deposit','deposit',driverSort,'setDriverSort') +
+    sortTh('Outstanding','outstanding',driverSort,'setDriverSort') +
+    '</tr>';
+  if(rows.length===0){
+    html += '<tr><td colspan="6" class="note">Tidak ada hasil.</td></tr>';
+  } else {
+    const withOut = rows.map(p => ({ p, out: computeOutstanding(p.nama_driver, p.plat_nomor, p.tarif_harian), dr: driverMap[p.driver_id] || {} }));
+    if(driverSort.key){
+      withOut.sort((a,b)=>{
+        const va = driverSortValue(driverSort.key, a), vb = driverSortValue(driverSort.key, b);
+        if(va<vb) return -1*driverSort.dir;
+        if(va>vb) return 1*driverSort.dir;
+        return 0;
+      });
+    } else {
+      withOut.sort((a,b) => (b.out.days ?? -1) - (a.out.days ?? -1));
+    }
+    withOut.forEach(({p, out, dr})=>{
+      const statusPill = p.status==='Aktif' ? pillFor('Aktif','green') : pillFor('Selesai','gray');
+      const prodPill = p.produktivitas==='Idle' ? pillFor('Idle','amber') : pillFor('Produktif','blue');
+      const ds = daysSince(p.last_installment);
+      const overdue = p.status==='Aktif' && p.partial_or_full==='Partial' && ds!==null && ds>=3;
+      const lastPay = p.last_installment ?
+        (p.last_installment + ' &middot; ' + pillFor(p.partial_or_full + (overdue?(' ('+ds+'h)'):''), overdue?'red':(p.partial_or_full==='Full'?'green':'amber')))
+        : '-';
+      const depositPill = (dr.status_deposit==='Lunas') ? pillFor('Lunas','green') : pillFor(dr.status_deposit||'-','amber');
+      const outCell = out.days===null ? '-' :
+        (out.days===0 ? pillFor('Lunas','green') :
+          `${pillFor(out.days+' hari','red')}<div style="font-size:11px;margin-top:3px" class="mono">${fmt(out.balance)}</div>`);
+      html += `<tr>
+        <td class="name">${p.nama_driver}<div style="font-size:11px;color:var(--ink-faint);font-weight:400">${p.plat_nomor} &middot; ${p.nama_model||''}</div></td>
+        <td>${statusPill}<div style="margin-top:4px">${prodPill}</div></td>
+        <td>${lastPay}</td>
+        <td class="mono">${fmt(p.setoran_total)}</td>
+        <td>${depositPill}</td>
+        <td>${outCell}</td>
+      </tr>`;
+    });
+  }
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// ---------- Mobil tab ----------
+function computeVehicleStats(){
+  const stats = {};
+  DATA.penugasan.forEach(p=>{
+    if(!stats[p.plat_nomor]) stats[p.plat_nomor] = { days: 0, setoran: 0 };
+    const start = p.tanggal_mulai ? new Date(p.tanggal_mulai) : null;
+    const end = p.tanggal_selesai ? new Date(p.tanggal_selesai) : new Date();
+    if(start){
+      const days = Math.max(0, Math.round((end - start) / (1000*60*60*24)));
+      stats[p.plat_nomor].days += days;
+    }
+    stats[p.plat_nomor].setoran += (p.setoran_total || 0);
+  });
+  return stats;
+}
+let mobilSort = {key:null, dir:1};
+function setMobilSort(key){
+  toggleSort(mobilSort, key, ()=>renderMobilTable(document.getElementById('search-mobil').value));
+}
+function mobilSortValue(key, m){
+  switch(key){
+    case 'plat': return m.plat_nomor;
+    case 'model': return (m.nama_model||'').toLowerCase();
+    case 'mitra': return (m.mitra||'').toLowerCase();
+    case 'statusmobil': return m.status_mobil||'';
+    case 'statuskontrak': return m.status_kontrak||'';
+    case 'days': return m._stats.days;
+    case 'setoran': return m._stats.setoran;
+    case 'avg': return m._stats.days>0 ? m._stats.setoran/m._stats.days : 0;
+    default: return 0;
+  }
+}
+function activeDriverFor(plat){
+  const found = DATA.penugasan.find(p=>p.plat_nomor===plat && p.status==='Aktif');
+  return found ? found.nama_driver : null;
+}
+
+function renderMobilTable(query){
+  if(!DATA) return;
+  const VEHICLE_STATS = computeVehicleStats();
+  const q = (query||'').toLowerCase().trim();
+  let rows = DATA.mobil.filter(m => !q || m.plat_nomor.toLowerCase().includes(q) || (m.nama_model||'').toLowerCase().includes(q));
+  rows = rows.map(m => ({...m, _stats: VEHICLE_STATS[m.plat_nomor] || {days:0, setoran:0}}));
+  if(mobilSort.key){
+    rows.sort((a,b)=>{
+      const va = mobilSortValue(mobilSort.key, a), vb = mobilSortValue(mobilSort.key, b);
+      if(va<vb) return -1*mobilSort.dir;
+      if(va>vb) return 1*mobilSort.dir;
+      return 0;
+    });
+  } else {
+    const statusOrder = ['Aktif','Bengkel','Inaktif','Operational Use'];
+    rows.sort((a,b) => {
+      const oa = statusOrder.indexOf(a.status_mobil); const ob = statusOrder.indexOf(b.status_mobil);
+      const ia = oa===-1 ? statusOrder.length : oa; const ib = ob===-1 ? statusOrder.length : ob;
+      if(ia !== ib) return ia - ib;
+      return b._stats.setoran - a._stats.setoran;
+    });
+  }
+  const container = document.getElementById('table-mobil');
+  let html = '<table><tr>' +
+    sortTh('Plat','plat',mobilSort,'setMobilSort') +
+    sortTh('Model','model',mobilSort,'setMobilSort') +
+    sortTh('Mitra','mitra',mobilSort,'setMobilSort') +
+    sortTh('Status Mobil','statusmobil',mobilSort,'setMobilSort') +
+    sortTh('Status Kontrak','statuskontrak',mobilSort,'setMobilSort') +
+    sortTh('Productive Days','days',mobilSort,'setMobilSort') +
+    sortTh('Total Setoran','setoran',mobilSort,'setMobilSort') +
+    sortTh('Rata-rata/Hari','avg',mobilSort,'setMobilSort') +
+    '</tr>';
+  if(rows.length===0){
+    html += '<tr><td colspan="8" class="note">Tidak ada hasil.</td></tr>';
+  } else {
+    rows.forEach(m=>{
+      const statusKind = m.status_mobil==='Aktif' ? 'green' : (m.status_mobil==='Bengkel'?'amber':'gray');
+      const kontrakKind = m.status_kontrak==='Booked' ? 'blue' : (m.status_kontrak==='Unavailable'?'red':'gray');
+      const avgPerDay = m._stats.days > 0 ? (m._stats.setoran / m._stats.days) : null;
+      const kontrakPill = m.status_kontrak==='Booked'
+        ? `<span title="Driver aktif: ${activeDriverFor(m.plat_nomor) || 'tidak diketahui'}">${pillFor(m.status_kontrak, kontrakKind)}</span>`
+        : pillFor(m.status_kontrak, kontrakKind);
+      html += `<tr>
+        <td class="name">${m.plat_nomor}</td>
+        <td>${m.nama_model||'-'}</td>
+        <td>${m.mitra||'-'}</td>
+        <td>${pillFor(m.status_mobil, statusKind)}</td>
+        <td>${kontrakPill}</td>
+        <td class="mono">${m._stats.days} hari</td>
+        <td class="mono">${fmt(m._stats.setoran)}</td>
+        <td class="mono">${avgPerDay!==null ? fmt(avgPerDay) : '-'}</td>
+      </tr>`;
+    });
+  }
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// ---------- Bengkel tab ----------
+function renderBengkelTable(){
+  if(!DATA) return;
+  const ongoing = DATA.bengkel.filter(b=>!b.tanggal_keluar);
+  const done = DATA.bengkel.filter(b=>b.tanggal_keluar);
+
+  const rowHtml = (b, showStatus) => `<tr>
+      <td class="name">${b.plat_nomor}</td>
+      <td>${b.jenis_mobil||'-'}</td>
+      <td>${b.tanggal_masuk || b.tanggal_masuk_raw || '-'}</td>
+      ${showStatus ? '' : `<td>${b.tanggal_keluar||'-'}</td>`}
+      <td>${b.alasan||'-'}</td>
+      ${showStatus ? `<td>${pillFor('Masih di bengkel','amber')}</td>` : ''}
+    </tr>`;
+
+  const ongoingEl = document.getElementById('table-bengkel-ongoing');
+  let html1 = '<table><tr><th>Plat</th><th>Model</th><th>Masuk</th><th>Alasan</th><th>Status</th></tr>';
+  html1 += ongoing.length===0 ? '<tr><td colspan="5" class="note">Tidak ada mobil yang sedang di bengkel.</td></tr>' :
+    ongoing.map(b=>rowHtml(b, true)).join('');
+  html1 += '</table>';
+  ongoingEl.innerHTML = html1;
+
+  const doneEl = document.getElementById('table-bengkel-done');
+  let html2 = '<table><tr><th>Plat</th><th>Model</th><th>Masuk</th><th>Keluar</th><th>Alasan</th></tr>';
+  html2 += done.length===0 ? '<tr><td colspan="5" class="note">Belum ada riwayat yang selesai.</td></tr>' :
+    done.sort((a,b)=> (b.tanggal_keluar||'').localeCompare(a.tanggal_keluar||'')).map(b=>rowHtml(b, false)).join('');
+  html2 += '</table>';
+  doneEl.innerHTML = html2;
+}
+
+// ---------- Award tab ----------
+function renderAwardTable(){
+  if(!DATA) return;
+  const container = document.getElementById('table-award');
+  const counts = {};
+  Object.entries(DATA.awards).forEach(([name,c])=>counts[name]=c);
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  let html = '<table><tr><th>Driver</th><th>Jumlah Penghargaan</th></tr>';
+  if(sorted.length===0){
+    html += '<tr><td colspan="2" class="note">Belum ada data.</td></tr>';
+  } else {
+    sorted.forEach(([name,c])=>{
+      html += `<tr><td class="name">${name}</td><td>${pillFor(c+'x','blue')}</td></tr>`;
+    });
+  }
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// ---------- Kalender tab ----------
+let calMonthIndex = null; // set once months list is known
+let calSelectedDate = null;
+let calOpenSections = { aktif: true, bengkel: false, inaktif: false };
+
+function pad2(n){ return String(n).padStart(2,'0'); }
+function isoOf(y,m,d){ return `${y}-${pad2(m+1)}-${pad2(d)}`; }
+function todayISO(){ const t=new Date(); return isoOf(t.getFullYear(), t.getMonth(), t.getDate()); }
+function pct(n,d){ return d>0 ? Math.round((n/d)*1000)/10 : 0; }
+
+function getCalMonths(){
+  let minDate = null;
+  DATA.penugasan.forEach(p=>{
+    if(p.tanggal_mulai){ const d=new Date(p.tanggal_mulai); if(!minDate||d<minDate) minDate=d; }
+  });
+  Object.keys(DATA.daily||{}).forEach(dateStr=>{
+    const d = new Date(dateStr); if(!minDate||d<minDate) minDate=d;
+  });
+  if(!minDate) minDate = new Date();
+  const maxDate = new Date();
+  const months = [];
+  let y = minDate.getFullYear(), m = minDate.getMonth();
+  while(y < maxDate.getFullYear() || (y===maxDate.getFullYear() && m<=maxDate.getMonth())){
+    months.push({year:y, month:m});
+    m++; if(m>11){ m=0; y++; }
+  }
+  return months;
+}
+
+function wasInBengkelOnDate(plat, dateStr){
+  return (DATA.bengkel||[]).some(b => {
+    if(b.plat_nomor !== plat) return false;
+    const keluar = b.tanggal_keluar || null;
+    if(b.tanggal_masuk){
+      // normal case: a real, parseable start date is on record
+      return b.tanggal_masuk <= dateStr && (keluar || todayISO()) >= dateStr;
+    }
+    // tanggal_masuk isn't a valid date, but something was entered there (e.g. "tolong isi")
+    // and there's no tanggal_keluar yet -> the car is flagged as still in the shop with an
+    // unknown start date. Rather than leaving past dates blank/uncounted, treat it as having
+    // been in bengkel the whole time up through today (open-ended), since we have no exit date.
+    if(b.tanggal_masuk_raw && !keluar) return dateStr <= todayISO();
+    return false;
+  });
+}
+
+function contractedPlatesOnDate(dateStr){
+  // plates with an active assignment that day, regardless of bengkel status
+  const map = {}; // plat -> nama_driver
+  DATA.penugasan.forEach(p=>{
+    if(!p.tanggal_mulai) return;
+    const finish = p.tanggal_selesai || todayISO();
+    if(p.tanggal_mulai <= dateStr && dateStr <= finish) map[p.plat_nomor] = p.nama_driver;
+  });
+  return map;
+}
+
+// Categorize the whole fleet for a given date into 3 mutually exclusive buckets
+// so they always sum to the total fleet size: aktif, bengkel, inaktif (idle, non-bengkel).
+function categorizeFleetOnDate(dateStr){
+  const contracted = contractedPlatesOnDate(dateStr);
+  const aktif = [], bengkel = [], inaktif = [];
+  let readyCount = 0;
+  DATA.mobil.forEach(m=>{
+    if(m.issued_dt && dateStr < m.issued_dt) return; // not yet issued/ready as of this date
+    readyCount++;
+    const plat = m.plat_nomor;
+    const inBengkel = wasInBengkelOnDate(plat, dateStr);
+    if(inBengkel){
+      bengkel.push({plat, nama_driver: contracted[plat] || null});
+    } else if(contracted[plat]){
+      aktif.push({plat, nama_driver: contracted[plat]});
+    } else {
+      inaktif.push({plat});
+    }
+  });
+  return { aktif, bengkel, inaktif, total: readyCount };
+}
+
+let calExcludeBengkelFromTotal = false;
+document.getElementById('calTotalAll').addEventListener('click', ()=>{
+  calExcludeBengkelFromTotal = false;
+  document.getElementById('calTotalAll').classList.add('active');
+  document.getElementById('calTotalExclBengkel').classList.remove('active');
+  calSelectedDate = null;
+  renderCalendar();
+});
+document.getElementById('calTotalExclBengkel').addEventListener('click', ()=>{
+  calExcludeBengkelFromTotal = true;
+  document.getElementById('calTotalExclBengkel').classList.add('active');
+  document.getElementById('calTotalAll').classList.remove('active');
+  calSelectedDate = null;
+  renderCalendar();
+});
+
+function occupancyPctFor(dateStr){
+  const cat = categorizeFleetOnDate(dateStr);
+  const denom = calExcludeBengkelFromTotal ? (cat.total - cat.bengkel.length) : cat.total;
+  return denom>0 ? Math.round((cat.aktif.length/denom)*100) : 0;
+}
+
+function calValueFor(dateStr){
+  return occupancyPctFor(dateStr);
+}
+
+function heatColor(ratio){
+  if(ratio<=0) return 'var(--paper)';
+  const steps = ['#E1EDF9','#B7D4F0','#88B7E6','#4F92D6','#1F5A9E'];
+  const idx = Math.min(steps.length-1, Math.floor(ratio * steps.length));
+  return steps[idx];
+}
+// Pick readable text color against a given heat step (dark steps need light text)
+function textColorFor(ratio){
+  // Heat steps are fixed absolute colors (not theme-aware), so the text color
+  // must also be fixed - using var(--ink) here would flip to a light color in
+  // dark mode and become invisible against the light-colored low-occupancy steps.
+  return ratio >= 0.55 ? '#F5F8FC' : '#2B2A25';
+}
+
+document.getElementById('calPrev').addEventListener('click', ()=>{
+  if(calMonthIndex>0){ calMonthIndex--; calSelectedDate=null; renderCalendar(); }
+});
+document.getElementById('calNext').addEventListener('click', ()=>{
+  if(calMonthIndex<totalWindows()-1){ calMonthIndex++; calSelectedDate=null; renderCalendar(); }
+});
+
+const MONTHS_PER_WINDOW = 4;
+function totalWindows(){ return Math.max(1, Math.ceil(getCalMonths().length / MONTHS_PER_WINDOW)); }
+
+// simple swipe gesture on mobile (whole 4-month window shifts per swipe)
+(function(){
+  let touchStartX = null;
+  const container = document.getElementById('calMulti');
+  container.addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+  container.addEventListener('touchend', e=>{
+    if(touchStartX===null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx > 50 && calMonthIndex>0){ calMonthIndex--; calSelectedDate=null; renderCalendar(); }
+    else if(dx < -50 && calMonthIndex<totalWindows()-1){ calMonthIndex++; calSelectedDate=null; renderCalendar(); }
+    touchStartX = null;
+  }, {passive:true});
+})();
+
+const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const WEEKDAY_NAMES = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+
+function renderMonthBlock(year, month){
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const startWeekday = new Date(year, month, 1).getDay();
+  const tISO = todayISO();
+  let cells = WEEKDAY_NAMES.map(w=>`<div class="cal-weekday">${w}</div>`).join('');
+  for(let i=0;i<startWeekday;i++) cells += '<div class="cal-day empty"></div>';
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = isoOf(year,month,d);
+    const val = calValueFor(dateStr); // occupancy %, 0-100
+    const ratio = Math.max(0, Math.min(1, val/100));
+    const bg = heatColor(ratio);
+    const fg = textColorFor(ratio);
+    const isToday = dateStr===tISO;
+    const isSelected = dateStr===calSelectedDate;
+    cells += `<div class="cal-day${isToday?' today':''}${isSelected?' selected':''}" style="background:${bg};color:${fg}" data-date="${dateStr}">
+      <div class="n">${d}</div>
+      <div class="pctval">${val}%</div>
+    </div>`;
+  }
+  return `<div class="cal-month-block">
+    <div class="cal-month-title">${MONTH_NAMES[month]} ${year}</div>
+    <div class="cal-grid">${cells}</div>
+  </div>`;
 }
 
 function renderCalendar(){
-  const view = VIEWS[currentView];
-  const root = document.getElementById('months');
-  root.innerHTML = '';
+  const months = getCalMonths();
+  const windows = totalWindows();
+  if(calMonthIndex===null) calMonthIndex = windows-1;
+  calMonthIndex = Math.max(0, Math.min(calMonthIndex, windows-1));
 
-  // Grid uses grid-auto-flow:column (2 rows, columns page sideways on desktop).
-  // Keep DOM in natural chronological order (so mobile swipe goes Apr->Mei->Jun->Jul),
-  // but assign a desktop-only visual "order" via CSS var so row1 reads Apr,Mei and
-  // row2 reads Jun,Jul instead of raw column-major order (Apr,Jun / Mei,Jul).
-  const cols = Math.ceil(months.length / 2);
+  let startIdx, sliceEnd;
+  if(windows===1){ startIdx=0; sliceEnd=months.length; }
+  else {
+    sliceEnd = months.length - (windows-1-calMonthIndex)*MONTHS_PER_WINDOW;
+    startIdx = Math.max(0, sliceEnd - MONTHS_PER_WINDOW);
+  }
+  const visible = months.slice(startIdx, sliceEnd);
 
-  months.forEach((mo, i)=>{
-    const desktopOrder = (i < cols) ? (2*i) : (2*(i-cols)+1);
-    const card = document.createElement('div');
-    card.className = 'month-card';
-    card.style.setProperty('--order-desktop', desktopOrder);
-    card.style.setProperty('--order-mobile', i);
+  const labelParts = visible.length ? [MONTH_NAMES[visible[0].month]+' '+visible[0].year, MONTH_NAMES[visible[visible.length-1].month]+' '+visible[visible.length-1].year] : ['',''];
+  document.getElementById('calMonthLabel').textContent = visible.length>1 ? (labelParts[0]+' \u2013 '+labelParts[1]) : labelParts[0];
 
-    const title = document.createElement('div');
-    title.className = 'month-title';
-    title.textContent = mo.name;
-    card.appendChild(title);
+  const legendEl = document.getElementById('calLegendChips');
+  legendEl.innerHTML = ['#E1EDF9','#B7D4F0','#88B7E6','#4F92D6','#1F5A9E']
+    .map(c=>`<span style="background:${c}"></span>`).join('');
 
-    const dn = document.createElement('div');
-    dn.className = 'daynames';
-    dayNames.forEach(d=>{
-      const s = document.createElement('span');
-      s.textContent = d;
-      dn.appendChild(s);
-    });
-    card.appendChild(dn);
+  const container = document.getElementById('calMulti');
+  container.innerHTML = visible.map(({year,month})=>renderMonthBlock(year,month)).join('');
 
-    const days = document.createElement('div');
-    days.className = 'days';
-
-    const firstDay = new Date(mo.y, mo.m-1, 1);
-    let offset = firstDay.getDay() - 1;
-    if(offset < 0) offset = 6;
-    for(let i=0;i<offset;i++){
-      const e = document.createElement('div');
-      e.className = 'day empty';
-      days.appendChild(e);
-    }
-
-    const daysInMonth = new Date(mo.y, mo.m, 0).getDate();
-    for(let d=1; d<=daysInMonth; d++){
-      const key = mo.y+'-'+String(mo.m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-      const val = getValue(key, currentView);
-      const cell = document.createElement('div');
-
-      if(val !== undefined){
-        const idx = Math.min(RAMP.length-1, Math.floor((val/view.max)*RAMP.length));
-        cell.className = 'day has-data';
-        cell.style.background = RAMP[idx];
-        cell.style.color = textColorFor(idx);
-        if(currentView === 'active'){
-          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div><div class="day-sub">'+DATA[key].active+' car</div>';
-        } else {
-          cell.innerHTML = '<div class="day-num">'+d+'</div><div class="day-val">'+view.fmt(val)+'</div>';
-        }
-        cell.addEventListener('mouseenter', ()=>showTooltip(key));
-        cell.addEventListener('mousemove', (e)=>positionTooltip(e));
-        cell.addEventListener('mouseleave', hideTooltip);
-        cell.addEventListener('click', (e)=>{
-          showTooltip(key);
-          positionTooltip(e);
-          clearTimeout(window._tooltipHideTimer);
-          window._tooltipHideTimer = setTimeout(hideTooltip, 3000);
-          showDetail(key, {scroll:true});
-        });
-      } else {
-        cell.className = 'day nodata';
-        cell.innerHTML = '<div class="day-num">'+d+'</div>';
+  container.querySelectorAll('.cal-day:not(.empty)').forEach(cell=>{
+    cell.addEventListener('click', ()=>{
+      calSelectedDate = cell.dataset.date;
+      renderCalendar();
+      renderCalDetail(calSelectedDate);
+      const detailEl = document.getElementById('calDetail');
+      if(detailEl){
+        detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      days.appendChild(cell);
-    }
-    card.appendChild(days);
-    root.appendChild(card);
+    });
   });
+
+  if(calSelectedDate) renderCalDetail(calSelectedDate); else document.getElementById('calDetail').style.display='none';
 }
 
-function showTooltip(key){
-  const d = DATA[key];
-  if(!d) return;
-  const tip = document.getElementById('dayTooltip');
-  tip.innerHTML =
-    '<div class="tip-row"><span>Setoran masuk</span><b>'+d.setoran+'</b></div>' +
-    '<div class="tip-row"><span>Mobil aktif</span><b>'+d.active+'</b></div>' +
-    '<div class="tip-row"><span>Total mobil keseluruhan</span><b>'+d.total_fleet+'</b></div>';
-  tip.style.display = 'block';
-}
-function positionTooltip(e){
-  const tip = document.getElementById('dayTooltip');
-  const offset = 14;
-  let x = e.clientX + offset;
-  let y = e.clientY + offset;
-  const tw = tip.offsetWidth || 180;
-  const th = tip.offsetHeight || 70;
-  if(x + tw > window.innerWidth - 8) x = e.clientX - tw - offset;
-  if(y + th > window.innerHeight - 8) y = e.clientY - th - offset;
-  tip.style.left = x + 'px';
-  tip.style.top = y + 'px';
-}
-function hideTooltip(){
-  document.getElementById('dayTooltip').style.display = 'none';
+function toggleSection(key){
+  calOpenSections[key] = !calOpenSections[key];
+  renderCalDetail(calSelectedDate);
 }
 
-function showDetail(key, opts){
-  const shouldScroll = opts && opts.scroll;
-  const d = DATA[key];
-  if(!d) return;
-  lastShownKey = key;
-  const detail = document.getElementById('detail');
-  detail.classList.add('show');
-  const dateObj = new Date(key+'T00:00:00');
-  const dateOpts = { day:'numeric', month:'long', year:'numeric' };
-  document.getElementById('detailTitle').textContent = dateObj.toLocaleDateString('id-ID', dateOpts);
+function renderCalDetail(dateStr){
+  const box = document.getElementById('calDetail');
+  box.style.display = 'block';
+  const d = new Date(dateStr);
+  const titleText = d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
 
-  const rosterBox = document.getElementById('detailRoster');
+  const cat = categorizeFleetOnDate(dateStr);
+  const dayData = (DATA.daily && DATA.daily[dateStr]) || {mobil_setor:[], total_rp:0};
+  const setoranCount = dayData.mobil_setor.length;
+  const aktifCount = cat.aktif.length;
+  const okupansiToggle = occupancyPctFor(dateStr);
+  const okupansiToggleLabel = calExcludeBengkelFromTotal ? 'Okupansi (Total Exclude Bengkel)' : 'Okupansi (Total Definitely All)';
+  const okupansiOperasional = pct(aktifCount, cat.total);
+  const setoranPct = pct(setoranCount, aktifCount);
 
-  if(currentView === 'active'){
-    const { normalVehicles, allBengkelVehicles, inactiveVehicles, totalFleet, occupancyIncl, occupancyExcl } = getFleetBreakdown(key);
+  const section = (key, label, cssClass, items, renderItem) => `
+    <div class="cd-section">
+      <div class="cd-section-head${calOpenSections[key]?' open':''}" onclick="toggleSection('${key}')">
+        <span>${label} (${items.length})</span>
+        <span class="car">&#9660;</span>
+      </div>
+      <div class="cd-section-body${calOpenSections[key]?' open':''}">
+        ${items.length===0 ? '<div class="note" style="padding:0">Tidak ada.</div>' : items.map(renderItem).join('')}
+      </div>
+    </div>`;
 
-    let gridHtml =
-      item('Setoran masuk', setoranValue(d)) +
-      item('Okupansi', occupancyIncl.toFixed(1) + '%') +
-      item('Okupansi (exclude mobil rusak)', occupancyExcl.toFixed(1) + '%');
-    document.getElementById('detailGrid').innerHTML = gridHtml;
+  box.innerHTML = `
+    <div class="cd-title">${titleText}</div>
+    <div class="cd-stats">
+      <div><div class="cd-stat-lbl">Setoran Masuk</div><div class="cd-stat-val">${setoranCount} <span class="pct">(${setoranPct}%)</span></div></div>
+      <div><div class="cd-stat-lbl">${okupansiToggleLabel}</div><div class="cd-stat-val">${okupansiToggle}%</div></div>
+      <div><div class="cd-stat-lbl">Okupansi (Exclude Mobil Rusak)</div><div class="cd-stat-val">${okupansiOperasional}%</div></div>
+    </div>
+    <div class="cd-cats">
+      <div class="cd-cat aktif"><div class="cd-cat-lbl">Mobil Aktif</div><div class="cd-cat-val">${cat.aktif.length}</div></div>
+      <div class="cd-cat bengkel"><div class="cd-cat-lbl">Mobil Bengkel</div><div class="cd-cat-val">${cat.bengkel.length}</div></div>
+      <div class="cd-cat inaktif"><div class="cd-cat-lbl">Mobil Inaktif</div><div class="cd-cat-val">${cat.inaktif.length}</div></div>
+    </div>
+    <div class="cd-total">
+      <div class="cd-total-lbl">Total Mobil Keseluruhan</div>
+      <div class="cd-total-val">${cat.total}</div>
+    </div>
+    ${section('aktif', 'Mobil Aktif Tanggal Ini', 'aktif', cat.aktif, item =>
+      `<div class="cd-item"><span class="plate">${item.plat}</span><span class="meta">${item.nama_driver||''}</span></div>`)}
+    ${section('bengkel', 'Mobil Inaktif \u2014 Bengkel', 'bengkel', cat.bengkel, item =>
+      `<div class="cd-item"><span class="plate">${item.plat}</span><span class="meta">${item.nama_driver ? 'Ada kontrak: '+item.nama_driver : 'Tanpa kontrak'}</span></div>`)}
+    ${section('inaktif', 'Mobil Inaktif \u2014 Non Bengkel', 'inaktif', cat.inaktif, item =>
+      `<div class="cd-item"><span class="plate">${item.plat}</span></div>`)}
+  `;
+}
 
-    const pyramidBox = document.getElementById('detailPyramid');
-    pyramidBox.innerHTML =
-      '<div class="pyramid">' +
-        '<div class="pyramid-top">' +
-          '<div class="pyramid-box pb-active"><div class="p-label">Mobil Aktif</div><div class="p-value">'+normalVehicles.length+'</div></div>' +
-          '<div class="pyramid-box pb-bengkel"><div class="p-label">Mobil Bengkel</div><div class="p-value">'+allBengkelVehicles.length+'</div></div>' +
-          '<div class="pyramid-box pb-inaktif"><div class="p-label">Mobil Inaktif</div><div class="p-value">'+inactiveVehicles.length+'</div></div>' +
-        '</div>' +
-        '<div class="pyramid-connector"></div>' +
-        '<div class="pyramid-total"><div class="p-label">Total Mobil Keseluruhan</div><div class="p-value">'+totalFleet+'</div></div>' +
-      '</div>';
-    pyramidBox.style.display = 'block';
+// ---------- Shared report helpers (calendar + month grouping) ----------
+const MONTH_NAMES_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const WEEKDAY_NAMES_SHORT = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
 
-    function rowHtml(v, i){
-      return '<div class="roster-row"><span class="roster-num">'+(i+1)+'</span><span class="roster-plat">'+v.plat+'</span><span class="roster-vehicle">'+v.vehicle+'</span><span class="roster-name">'+v.name+'</span></div>';
-    }
-    function rowHtmlNoName(v, i){
-      return '<div class="roster-row" style="grid-template-columns:22px 110px 1fr;"><span class="roster-num">'+(i+1)+'</span><span class="roster-plat">'+v.plat+'</span><span class="roster-vehicle">'+v.vehicle+'</span></div>';
-    }
-    function buildSection(id, title, count, rowsHtml){
-      return '<div class="roster-section">' +
-        '<button class="section-toggle" data-target="'+id+'">' +
-          '<span class="section-toggle-title">'+title+' ('+count+')</span>' +
-          '<span class="section-toggle-arrow">▾</span>' +
-        '</button>' +
-        '<div class="section-content" id="'+id+'">' + (rowsHtml || '<div class="section-empty">Tidak ada.</div>') + '</div>' +
-      '</div>';
-    }
+function ledgerStatusColor(status){
+  return { full:'#8FBBA8', partial:'#DDB35C', libur:'#8FA8C7', bengkel:'#ABA695', skip:'#C17264' }[status] || 'var(--paper)';
+}
+function ledgerStatusTextColor(status){
+  return { full:'#0A3D2E', partial:'#4A3105', libur:'#16283D', bengkel:'#3A362A', skip:'#4A140C' }[status] || 'var(--ink-faint)';
+}
+function ledgerStatusLabel(status){
+  return { full:'Full', partial:'Partial', libur:'Libur', bengkel:'Bengkel', skip:'Skip' }[status] || status;
+}
+function ledgerStatusSymbol(status){
+  // Redundant non-color encoding so status is still distinguishable for colorblind users.
+  return { full:'\u2713', partial:'\u00BD', libur:'L', bengkel:'B', skip:'\u2715' }[status] || '';
+}
 
-    let html = '';
-    html += buildSection('sec-aktif', 'Mobil aktif tanggal ini', normalVehicles.length, normalVehicles.map(rowHtml).join(''));
-    html += buildSection('sec-bengkel', 'Mobil inaktif — bengkel', allBengkelVehicles.length, allBengkelVehicles.map((v,i)=>rowHtmlNoName(v, i)).join(''));
-    html += buildSection('sec-inaktif', 'Mobil inaktif — non bengkel', inactiveVehicles.length, inactiveVehicles.map((v,i)=>rowHtmlNoName(v, i)).join(''));
+function filterLedgerByRange(ledger, start, end){
+  return ledger.filter(r => (!start || r.tanggal >= start) && (!end || r.tanggal <= end));
+}
 
-    rosterBox.innerHTML = html;
-    rosterBox.style.display = 'block';
+function groupLedgerByMonth(ledger){
+  const groups = {};
+  ledger.forEach(r=>{
+    const ym = r.tanggal.slice(0,7);
+    (groups[ym] = groups[ym] || []).push(r);
+  });
+  return groups;
+}
 
-    rosterBox.querySelectorAll('.section-toggle').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const content = document.getElementById(btn.dataset.target);
-        const isOpen = content.classList.toggle('open');
-        btn.classList.toggle('open', isOpen);
-      });
-    });
-  } else if(currentView === 'per_car'){
-    document.getElementById('detailPyramid').style.display = 'none';
-    let gridHtml =
-      item('Setoran masuk', setoranValue(d)) +
-      item('Mobil aktif (kontrak)', d.active) +
-      item('Total pendapatan', 'Rp' + d.revenue.toLocaleString('id-ID')) +
-      item('Pendapatan / mobil aktif', 'Rp' + d.per_car.toLocaleString('id-ID'));
-    document.getElementById('detailGrid').innerHTML = gridHtml;
-
-    const revStr = 'Rp' + d.revenue.toLocaleString('id-ID');
-    const perCarStr = 'Rp' + d.per_car.toLocaleString('id-ID');
-
-    const txs = TX_BY_DATE[key] || [];
-    let txRows = txs.map(t=>{
-      const countNote = t.count > 1 ? ' <span class="tx-count">('+t.count+'x setor)</span>' : '';
-      return '<div class="roster-row" style="grid-template-columns:1fr 130px;">'+
-        '<span class="roster-name">'+t.name+countNote+'</span>'+
-        '<span class="roster-plat" style="text-align:right;">Rp'+t.total.toLocaleString('id-ID')+'</span>'+
-      '</div>';
-    }).join('');
-
-    rosterBox.innerHTML =
-      '<div class="roster-title">Rincian perhitungan</div>' +
-      '<div class="calc-line">'+
-        '<span class="calc-num">'+revStr+'</span>'+
-        '<span class="calc-op">÷</span>'+
-        '<span class="calc-num">'+d.active+' mobil aktif</span>'+
-        '<span class="calc-op">=</span>'+
-        '<span class="calc-result">'+perCarStr+' / mobil</span>'+
-      '</div>' +
-      (txs.length > 0
-        ? '<div class="roster-title" style="margin-top:16px;">Asal total pendapatan ('+txs.length+' driver setor)</div>' + txRows
-        : '<div class="roster-title" style="margin-top:16px;">Tidak ada data transaksi tercatat untuk tanggal ini</div>');
-    rosterBox.style.display = 'block';
-  } else {
-    document.getElementById('detailPyramid').style.display = 'none';
-    let gridHtml =
-      item('Setoran masuk', setoranValue(d)) +
-      item('Mobil aktif (kontrak)', d.active) +
-      item('Total pendapatan', 'Rp' + d.revenue.toLocaleString('id-ID')) +
-      item('Pendapatan / mobil aktif', 'Rp' + d.per_car.toLocaleString('id-ID'));
-    document.getElementById('detailGrid').innerHTML = gridHtml;
-
-    rosterBox.style.display = 'none';
-    rosterBox.innerHTML = '';
+function renderLedgerCalendarMonth(ym, rowsForMonth){
+  const [y, m] = ym.split('-').map(Number);
+  const year = y, month = m-1;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const startWeekday = new Date(year, month, 1).getDay();
+  const byDate = {};
+  rowsForMonth.forEach(r=>byDate[r.tanggal]=r);
+  let cells = WEEKDAY_NAMES_SHORT.map(w=>`<div class="cal-weekday">${w}</div>`).join('');
+  for(let i=0;i<startWeekday;i++) cells += '<div class="cal-day empty"></div>';
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = `${year}-${pad2(month+1)}-${pad2(d)}`;
+    const row = byDate[dateStr];
+    const bg = row ? ledgerStatusColor(row.status) : 'var(--paper)';
+    const fg = row ? ledgerStatusTextColor(row.status) : 'var(--ink-faint)';
+    const sym = row ? ledgerStatusSymbol(row.status) : '';
+    cells += `<div class="cal-day" style="background:${bg};color:${fg}"><div class="n">${d}</div>${sym?`<div class="sym">${sym}</div>`:''}</div>`;
   }
+  return `<div class="report-cal-wrap"><div class="cal-month-block"><div class="cal-grid">${cells}</div></div></div>`;
+}
 
-  if(shouldScroll){
-    detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+function reportLegendHTML(){
+  const items = [['full','Setoran (Full)'],['partial','Setoran (Partial)'],['libur','Libur'],['bengkel','Bengkel'],['skip','Kosong (Skip)']];
+  return '<div class="report-legend">' + items.map(([k,label])=>
+    `<span><i style="background:${ledgerStatusColor(k)};color:${ledgerStatusTextColor(k)}">${ledgerStatusSymbol(k)}</i>${label}</span>`
+  ).join('') + '</div>';
+}
+
+function renderReportBody(containerId, ledger, otherFieldKey, otherFieldLabel){
+  const groups = groupLedgerByMonth(ledger);
+  const months = Object.keys(groups).sort();
+  const container = document.getElementById(containerId);
+  if(months.length===0){
+    container.innerHTML = '<div class="card"><div class="note">Tidak ada data pada rentang tanggal ini.</div></div>';
+    return;
   }
-}
-function setoranValue(d){
-  const pct = d.active > 0 ? (d.setoran / d.active * 100) : 0;
-  return d.setoran + ' <span class="value-pct">(' + pct.toFixed(0) + '%)</span>';
-}
-function addDaysISO(iso, n){
-  const d = new Date(iso+'T00:00:00Z');
-  d.setUTCDate(d.getUTCDate()+n);
-  return d.toISOString().slice(0,10);
-}
+  let html = reportLegendHTML();
 
-function daysBetween(fromISO, toISO){
-  const a = new Date(fromISO+'T00:00:00Z');
-  const b = new Date(toISO+'T00:00:00Z');
-  return Math.round((b-a) / 86400000);
-}
-
-const SUPERVISOR_WA_NUMBER = '6282136673896';
-let currentTunggakanRows = [];
-
-function sendTunggakanToSupervisor(){
-  const overdueRows = currentTunggakanRows.filter(r => r.daysDue > 0);
-  const dateFmt = new Date(VAL_DATE+'T00:00:00').toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
-
-  let msg = 'This is a notification about today\'s over due (' + dateFmt + '):\n\n';
-  if(overdueRows.length === 0){
-    msg += 'No overdue drivers today.';
-  } else {
-    overdueRows.forEach((r,i)=>{
-      msg += (i+1) + '. ' + r.name + (r.overDeposit ? ' \u26A0\uFE0F' : '') + ' (' + r.plat + ') - ' + r.daysDue + ' hari - Rp' + r.tunggakan.toLocaleString('id-ID') + '\n';
-    });
-    const total = overdueRows.reduce((s,r)=>s+r.tunggakan,0);
-    msg += '\nTotal: Rp' + total.toLocaleString('id-ID');
-  }
-
-  const url = 'https://wa.me/' + SUPERVISOR_WA_NUMBER + '?text=' + encodeURIComponent(msg);
-  window.open(url, '_blank');
-}
-
-function renderTunggakan(){
-  const cutoffDate = addDaysISO(VAL_DATE, -2); // ops gives a 2-day grace period before setoran counts as overdue
-  const activeDrivers = ROSTER.filter(r => r.status === 'Active' && r.lastPay);
-  const rows = activeDrivers.map(r => {
-    const daysDue = Math.max(0, daysBetween(r.lastPay, cutoffDate) - (r.offDays || 0));
-    const tunggakan = daysDue * (r.dailyRate || 0);
-    const overDeposit = (r.deposit != null) && (tunggakan > r.deposit);
-    return { ...r, daysDue, tunggakan, overDeposit };
-  }).sort((a,b) => b.daysDue - a.daysDue);
-
-  const totalOutstanding = rows.reduce((s,r)=>s+r.tunggakan, 0);
-  const totalDeposit = rows.reduce((s,r)=>s+(r.deposit||0), 0);
-  const avgDaysDue = rows.length ? (rows.reduce((s,r)=>s+r.daysDue,0)/rows.length) : 0;
-  const worst = rows.length ? rows[0] : null;
-  currentTunggakanRows = rows;
-
-  let html = '<div class="stat-row">' +
-    stat('Total Tunggakan', 'Rp' + totalOutstanding.toLocaleString('id-ID')) +
-    stat('Total Deposit', 'Rp' + totalDeposit.toLocaleString('id-ID')) +
-    stat('Rata-rata Days Due', Math.round(avgDaysDue*10)/10 + ' hari') +
-    stat('Paling Lama', worst ? worst.daysDue + ' hari' : '-') +
-    '</div>';
-
-  html += '<div class="tt-note"><strong>Tanda &#9888; muncul kalau Outstanding sudah melebihi deposit driver.</strong></div>';
-
-  const overdueCount = rows.filter(r=>r.daysDue > 0).length;
-  html += '<button class="wa-btn" onclick="sendTunggakanToSupervisor()">' +
-    '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.2-.1.2-.3.3-.4.1-.2 0-.4 0-.5C11 9.5 10.6 8.5 10.4 8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.6-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>' +
-    'Kirim ke Supervisor (' + overdueCount + ' overdue)' +
-  '</button>';
-
-  html += '<div class="tunggakan-table">';
-  html += '<div class="tt-row tt-head">' +
-    '<span class="tt-rank"></span>' +
-    '<span class="tt-name">Driver</span>' +
-    '<span class="tt-plat">Tarif Harian</span>' +
-    '<span class="tt-lastpay">Last Pay</span>' +
-    '<span class="tt-days">Days Due</span>' +
-    '<span class="tt-outstanding">Outstanding</span>' +
-    '<span class="tt-deposit">Deposit</span>' +
-  '</div>';
-
-  rows.forEach((r,i)=>{
-    const lastPayFmt = new Date(r.lastPay+'T00:00:00').toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
-    let severity = 'tt-low';
-    if(r.daysDue >= 10) severity = 'tt-high';
-    else if(r.daysDue >= 5) severity = 'tt-mid';
-    html += '<div class="tt-row">' +
-      '<span class="tt-rank">'+(i+1)+'</span>' +
-      '<span class="tt-name"><span class="tt-name-line">'+r.name+(r.overDeposit ? ' <span class="tt-warn" title="Outstanding melebihi deposit">&#9888;</span>' : '')+'</span><span class="tt-vehicle">'+r.vehicle+' &middot; '+r.plat+'</span></span>' +
-      '<span class="tt-plat">Rp'+(r.dailyRate||0).toLocaleString('id-ID')+'/hari</span>' +
-      '<span class="tt-lastpay">'+lastPayFmt+(r.offDays > 0 ? ' <span class="tt-offdays">('+r.offDays+' off)</span>' : '')+'</span>' +
-      '<span class="tt-days '+severity+'">'+r.daysDue+' hari</span>' +
-      '<span class="tt-outstanding"><span class="tt-mobile-label">Outstanding: </span>Rp'+r.tunggakan.toLocaleString('id-ID')+'</span>' +
-      '<span class="tt-deposit"><span class="tt-mobile-label">Deposit: </span>'+(r.deposit != null ? 'Rp'+r.deposit.toLocaleString('id-ID') : '-')+'</span>' +
-    '</div>';
+  html += '<div class="report-cal-row">';
+  months.forEach(ym=>{
+    const rows = groups[ym];
+    const [y,m] = ym.split('-').map(Number);
+    const monthLabelShort = MONTH_NAMES_FULL[m-1].slice(0,3) + ' ' + y;
+    html += `<div class="report-cal-item">
+      <div class="report-cal-item-label">${monthLabelShort}</div>
+      ${renderLedgerCalendarMonth(ym, rows)}
+    </div>`;
   });
   html += '</div>';
 
-  document.getElementById('tunggakanSection').innerHTML = html;
+  months.forEach(ym=>{
+    const rows = groups[ym];
+    const [y,m] = ym.split('-').map(Number);
+    const monthLabel = MONTH_NAMES_FULL[m-1] + ' ' + y;
+    const totalPaid = rows.reduce((s,r)=>s+r.paid,0);
+    html += `<div class="report-month-section">
+      <div class="report-month-title">${monthLabel}</div>
+      <div class="card">
+        <div class="table-scroll"><table><tr><th>Tanggal</th><th>${otherFieldLabel}</th><th>Status</th><th>Dibayar</th><th>Tarif</th></tr>
+        ${rows.map(r=>`<tr>
+          <td class="mono">${r.tanggal}</td>
+          <td>${r[otherFieldKey]}</td>
+          <td><span class="pill" style="background:${ledgerStatusColor(r.status)};color:${ledgerStatusTextColor(r.status)}">${ledgerStatusLabel(r.status)}</span></td>
+          <td class="mono">${fmt(r.paid)}</td>
+          <td class="mono">${fmt(r.tarif)}</td>
+        </tr>`).join('')}
+        </table></div>
+        <div class="note">Total bulan ini: <b class="mono">${fmt(totalPaid)}</b></div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
 }
 
-function item(label, value){
-  return '<div class="d-item"><div class="label">'+label+'</div><div class="value">'+value+'</div></div>';
-}
-
-document.querySelectorAll('#viewSwitch button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#viewSwitch button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentView = btn.dataset.view;
-
-    const calSection = document.getElementById('calendarSection');
-    const ttSection = document.getElementById('tunggakanSection');
-    const statRow = document.getElementById('statRow');
-
-    if(currentView === 'tunggakan'){
-      calSection.style.display = 'none';
-      ttSection.style.display = 'block';
-      statRow.style.display = 'none';
-      renderTunggakan();
-    } else {
-      calSection.style.display = '';
-      ttSection.style.display = 'none';
-      statRow.style.display = '';
-      buildStats();
-      renderCalendar();
+function buildLedgerForVehicle(plat){
+  const paidByDueDate = {};
+  (DATA.setoran_raw||[]).forEach(r=>{
+    const [p, , , tanggalUntuk, jenis, jumlah] = r;
+    if(p !== plat) return;
+    if(jenis && jenis !== 'Rental Harian') return;
+    if(!tanggalUntuk) return;
+    paidByDueDate[tanggalUntuk] = (paidByDueDate[tanggalUntuk]||0) + (jumlah||0);
+  });
+  const assignments = DATA.penugasan.filter(p=>p.plat_nomor===plat && p.tanggal_mulai)
+    .sort((a,b)=>a.tanggal_mulai.localeCompare(b.tanggal_mulai));
+  const ledger = [];
+  assignments.forEach(p=>{
+    const finish = p.tanggal_selesai || todayISO();
+    let cursor = new Date(p.tanggal_mulai); cursor.setHours(0,0,0,0);
+    const end = new Date(finish); end.setHours(0,0,0,0);
+    while(cursor <= end){
+      const dateStr = toISO(cursor);
+      const paid = paidByDueDate[dateStr] || 0;
+      const tarif = p.tarif_harian || 0;
+      const isOffDay = (DATA.off_dates[p.nama_driver]||[]).includes(dateStr);
+      const isBengkelDay = wasInBengkelOnDate(plat, dateStr);
+      let status = 'skip';
+      if(paid >= tarif && tarif>0) status = 'full';
+      else if(paid > 0) status = 'partial';
+      else if(isOffDay) status = 'libur';
+      else if(isBengkelDay) status = 'bengkel';
+      ledger.push({ tanggal: dateStr, nama_driver: p.nama_driver, paid, tarif, status });
+      cursor.setDate(cursor.getDate()+1);
     }
   });
-});
-
-document.getElementById('bengkelToggle').addEventListener('change', (e)=>{
-  includeBengkelInOccupancy = e.target.checked;
-  buildStats();
-  renderCalendar();
-  if(document.getElementById('detail').classList.contains('show') && lastShownKey){
-    showDetail(lastShownKey);
-  }
-});
-
-buildLegend();
-buildStats();
-renderCalendar();
-showDetail(VAL_DATE);
-
-// On mobile, default the swipeable calendar to the latest month instead of the first one
-if(window.matchMedia('(max-width:480px)').matches){
-  requestAnimationFrame(()=>{
-    const monthsEl = document.getElementById('months');
-    monthsEl.scrollLeft = monthsEl.scrollWidth;
-  });
+  return ledger.sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
 }
+
+function buildLedgerForDriver(nama){
+  const paidByDueDate = {};
+  (DATA.setoran_raw||[]).forEach(r=>{
+    const [, n, , tanggalUntuk, jenis, jumlah] = r;
+    if(n !== nama) return;
+    if(jenis && jenis !== 'Rental Harian') return;
+    if(!tanggalUntuk) return;
+    paidByDueDate[tanggalUntuk] = (paidByDueDate[tanggalUntuk]||0) + (jumlah||0);
+  });
+  const assignments = DATA.penugasan.filter(p=>p.nama_driver===nama && p.tanggal_mulai)
+    .sort((a,b)=>a.tanggal_mulai.localeCompare(b.tanggal_mulai));
+  const ledger = [];
+  assignments.forEach(p=>{
+    const finish = p.tanggal_selesai || todayISO();
+    let cursor = new Date(p.tanggal_mulai); cursor.setHours(0,0,0,0);
+    const end = new Date(finish); end.setHours(0,0,0,0);
+    while(cursor <= end){
+      const dateStr = toISO(cursor);
+      const paid = paidByDueDate[dateStr] || 0;
+      const tarif = p.tarif_harian || 0;
+      const isOffDay = (DATA.off_dates[nama]||[]).includes(dateStr);
+      const isBengkelDay = wasInBengkelOnDate(p.plat_nomor, dateStr);
+      let status = 'skip';
+      if(paid >= tarif && tarif>0) status = 'full';
+      else if(paid > 0) status = 'partial';
+      else if(isOffDay) status = 'libur';
+      else if(isBengkelDay) status = 'bengkel';
+      ledger.push({ tanggal: dateStr, plat_nomor: p.plat_nomor, paid, tarif, status });
+      cursor.setDate(cursor.getDate()+1);
+    }
+  });
+  return ledger.sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
+}
+
+function drawMiniCalendarPDF(doc, x, y, cellSize, ym, rowsForMonth){
+  const [year, m] = ym.split('-').map(Number);
+  const month = m - 1;
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const startWeekday = new Date(year, month, 1).getDay();
+  const byDate = {};
+  rowsForMonth.forEach(r=>byDate[r.tanggal]=r);
+  const colorMap = {
+    full:[143,187,168], partial:[221,179,92], libur:[143,168,199], bengkel:[171,166,149], skip:[193,114,100],
+  };
+  const textColorMap = {
+    full:[10,61,46], partial:[74,49,5], libur:[22,40,61], bengkel:[58,54,42], skip:[74,20,12],
+  };
+  const symbolMap = { full:'\u2713', partial:'\u00BD', libur:'L', bengkel:'B', skip:'X' };
+  const weekdays = ['M','S','S','R','K','J','S'];
+  doc.setFont(undefined,'normal');
+  doc.setFontSize(6.5);
+  doc.setTextColor(140,138,125);
+  weekdays.forEach((w,i)=>{
+    doc.text(w, x + i*cellSize + cellSize/2, y, {align:'center'});
+  });
+  let row=0, col=startWeekday;
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = `${year}-${pad2(month+1)}-${pad2(d)}`;
+    const rec = byDate[dateStr];
+    const cx = x + col*cellSize;
+    const cy = y + 3 + row*cellSize;
+    const color = rec ? colorMap[rec.status] : [244,241,232];
+    const txtColor = rec ? textColorMap[rec.status] : [140,138,125];
+    doc.setFillColor(color[0],color[1],color[2]);
+    doc.roundedRect(cx, cy, cellSize-0.8, cellSize-0.8, 0.6, 0.6, 'F');
+    doc.setFontSize(6.2);
+    doc.setTextColor(txtColor[0],txtColor[1],txtColor[2]);
+    doc.text(String(d), cx + (cellSize-0.8)/2, cy + (cellSize-0.8)/2, {align:'center'});
+    if(rec){
+      doc.setFontSize(4.6);
+      doc.text(symbolMap[rec.status]||'', cx + (cellSize-0.8)/2, cy + (cellSize-0.8)/2 + 2.6, {align:'center'});
+    }
+    col++;
+    if(col>6){ col=0; row++; }
+  }
+  const totalRows = row + (col>0?1:0);
+  return y + 3 + totalRows*cellSize + 5;
+}
+
+function downloadReportPDF(meta, ledger){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const marginX = 16;
+  let y = 20;
+
+  doc.setFont(undefined,'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(20,128,95);
+  doc.text('MOREN', marginX, y);
+  doc.setFontSize(9);
+  doc.setTextColor(140,138,125);
+  doc.text('Fleet Operations', marginX, y+4.5);
+  doc.setFontSize(9);
+  doc.text('Dicetak: ' + new Date().toLocaleString('id-ID'), pageW-marginX, y, {align:'right'});
+
+  y += 12;
+  doc.setDrawColor(20,128,95);
+  doc.setLineWidth(0.8);
+  doc.line(marginX, y, pageW-marginX, y);
+  y += 9;
+
+  doc.setFont(undefined,'bold');
+  doc.setFontSize(15);
+  doc.setTextColor(30,29,25);
+  doc.text(meta.title, marginX, y);
+  y += 7;
+  doc.setFont(undefined,'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(90,88,78);
+  doc.text(meta.subtitle, marginX, y);
+  y += 5.5;
+  doc.setFontSize(9.5);
+  doc.text('Periode: ' + meta.periodLabel, marginX, y);
+  y += 9;
+  doc.setDrawColor(220,215,200);
+  doc.setLineWidth(0.3);
+  doc.line(marginX, y, pageW-marginX, y);
+  y += 8;
+
+  const groups = groupLedgerByMonth(ledger);
+  const months = Object.keys(groups).sort();
+
+  if(months.length === 0){
+    doc.setFontSize(11);
+    doc.setTextColor(120,118,105);
+    doc.text('Tidak ada data pada rentang tanggal ini.', marginX, y);
+  }
+
+  months.forEach((ym, idx)=>{
+    if(idx>0){ doc.addPage(); y = 20; }
+    const rows = groups[ym];
+    const [yy,mm] = ym.split('-').map(Number);
+
+    doc.setFont(undefined,'bold');
+    doc.setFontSize(12.5);
+    doc.setTextColor(30,29,25);
+    doc.text(MONTH_NAMES_FULL[mm-1] + ' ' + yy, marginX, y);
+    y += 6;
+
+    y = drawMiniCalendarPDF(doc, marginX, y, 8.2, ym, rows) + 2;
+
+    doc.autoTable({
+      startY: y,
+      head: [['Tanggal', meta.otherLabel, 'Status', 'Dibayar', 'Tarif']],
+      body: rows.map(r=>[r.tanggal, String(r[meta.otherKey]||'-'), ledgerStatusLabel(r.status), fmt(r.paid), fmt(r.tarif)]),
+      styles: { fontSize: 8, textColor: [40,40,35], cellPadding: 2 },
+      headStyles: { fillColor: [20,128,95], textColor: [255,255,255], fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [250,246,237] },
+      margin: { left: marginX, right: marginX },
+      theme: 'grid',
+    });
+    y = doc.lastAutoTable.finalY + 7;
+
+    const totalPaid = rows.reduce((s,r)=>s+r.paid,0);
+    doc.setFont(undefined,'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(20,128,95);
+    doc.text('Total setoran bulan ini: ' + fmt(totalPaid), marginX, y);
+  });
+
+  const pageCount = doc.internal.getNumberOfPages();
+  for(let i=1;i<=pageCount;i++){
+    doc.setPage(i);
+    doc.setFont(undefined,'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(150,148,135);
+    doc.text('Moren Fleet Operations \u2014 Laporan dibuat otomatis dari sistem', marginX, pageH-10);
+    doc.text('Halaman ' + i + ' / ' + pageCount, pageW-marginX, pageH-10, {align:'right'});
+  }
+
+  doc.save(meta.filename);
+}
+
+// ---------- Laporan per Mobil tab ----------
+let lapMobilSelected = null;
+let lapMobilStart = null, lapMobilEnd = null;
+document.getElementById('lapMobilSelect').addEventListener('change', e=>{
+  lapMobilSelected = e.target.value;
+  lapMobilStart = null; lapMobilEnd = null;
+  document.getElementById('lapMobilStart').value = '';
+  document.getElementById('lapMobilEnd').value = '';
+  renderLaporanMobil();
+});
+document.getElementById('lapMobilStart').addEventListener('change', e=>{ lapMobilStart = e.target.value || null; renderLaporanMobil(); });
+document.getElementById('lapMobilEnd').addEventListener('change', e=>{ lapMobilEnd = e.target.value || null; renderLaporanMobil(); });
+document.getElementById('lapMobilPdf').addEventListener('click', ()=>{
+  const vehicle = DATA.mobil.find(m=>m.plat_nomor===lapMobilSelected) || {};
+  const ledger = filterLedgerByRange(buildLedgerForVehicle(lapMobilSelected), lapMobilStart, lapMobilEnd);
+  downloadReportPDF({
+    title: 'Laporan Setoran Mobil',
+    subtitle: `${lapMobilSelected} \u2014 ${vehicle.nama_model||'-'} \u2014 Mitra: ${vehicle.mitra||'-'}`,
+    periodLabel: (lapMobilStart||lapMobilEnd) ? `${lapMobilStart||'awal'} s/d ${lapMobilEnd||'sekarang'}` : 'Seluruh riwayat',
+    otherKey: 'nama_driver', otherLabel: 'Driver',
+    filename: `laporan-mobil-${lapMobilSelected.replace(/\s+/g,'')}.pdf`,
+  }, ledger);
+});
+
+function renderLaporanMobil(){
+  if(!DATA) return;
+  const select = document.getElementById('lapMobilSelect');
+  const plates = [...DATA.mobil].sort((a,b)=>a.plat_nomor.localeCompare(b.plat_nomor));
+  if(!lapMobilSelected && plates.length) lapMobilSelected = plates[0].plat_nomor;
+  select.innerHTML = plates.map(m=>
+    `<option value="${m.plat_nomor}"${m.plat_nomor===lapMobilSelected?' selected':''}>${m.plat_nomor} \u2014 ${m.nama_model||'-'}</option>`
+  ).join('');
+
+  const fullLedger = buildLedgerForVehicle(lapMobilSelected);
+  const ledger = filterLedgerByRange(fullLedger, lapMobilStart, lapMobilEnd);
+
+  const totalPaid = ledger.reduce((s,r)=>s+r.paid,0);
+  const skipCount = ledger.filter(r=>r.status==='skip').length;
+  const partialCount = ledger.filter(r=>r.status==='partial').length;
+  const liburCount = ledger.filter(r=>r.status==='libur').length;
+  const bengkelCount = ledger.filter(r=>r.status==='bengkel').length;
+
+  document.getElementById('lapMobilStats').innerHTML = `
+    <div class="stat"><div class="lbl">Total Setoran Rental Harian</div><div class="val good">${fmt(totalPaid)}</div></div>
+    <div class="stat"><div class="lbl">Hari Skip (Tanpa Alasan)</div><div class="val ${skipCount?'bad':''}">${skipCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Partial</div><div class="val ${partialCount?'warn':''}">${partialCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Libur Driver</div><div class="val">${liburCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Mobil Bengkel</div><div class="val">${bengkelCount}</div></div>
+  `;
+
+  renderReportBody('lapMobilReport', ledger, 'nama_driver', 'Driver');
+}
+
+// ---------- Laporan per Driver tab ----------
+let lapDriverSelected = null;
+let lapDriverStart = null, lapDriverEnd = null;
+document.getElementById('lapDriverSelect').addEventListener('change', e=>{
+  lapDriverSelected = e.target.value;
+  lapDriverStart = null; lapDriverEnd = null;
+  document.getElementById('lapDriverStart').value = '';
+  document.getElementById('lapDriverEnd').value = '';
+  renderLaporanDriver();
+});
+document.getElementById('lapDriverStart').addEventListener('change', e=>{ lapDriverStart = e.target.value || null; renderLaporanDriver(); });
+document.getElementById('lapDriverEnd').addEventListener('change', e=>{ lapDriverEnd = e.target.value || null; renderLaporanDriver(); });
+document.getElementById('lapDriverPdf').addEventListener('click', ()=>{
+  const ledger = filterLedgerByRange(buildLedgerForDriver(lapDriverSelected), lapDriverStart, lapDriverEnd);
+  downloadReportPDF({
+    title: 'Laporan Setoran Driver',
+    subtitle: lapDriverSelected,
+    periodLabel: (lapDriverStart||lapDriverEnd) ? `${lapDriverStart||'awal'} s/d ${lapDriverEnd||'sekarang'}` : 'Seluruh riwayat',
+    otherKey: 'plat_nomor', otherLabel: 'Mobil',
+    filename: `laporan-driver-${lapDriverSelected.replace(/\s+/g,'')}.pdf`,
+  }, ledger);
+});
+
+function renderLaporanDriver(){
+  if(!DATA) return;
+  const select = document.getElementById('lapDriverSelect');
+  const driverNames = [...DATA.drivers].sort((a,b)=>a.nama.localeCompare(b.nama));
+  if(!lapDriverSelected && driverNames.length) lapDriverSelected = driverNames[0].nama;
+  select.innerHTML = driverNames.map(d=>
+    `<option value="${d.nama}"${d.nama===lapDriverSelected?' selected':''}>${d.nama}</option>`
+  ).join('');
+
+  const fullLedger = buildLedgerForDriver(lapDriverSelected);
+  const ledger = filterLedgerByRange(fullLedger, lapDriverStart, lapDriverEnd);
+
+  const totalPaid = ledger.reduce((s,r)=>s+r.paid,0);
+  const skipCount = ledger.filter(r=>r.status==='skip').length;
+  const partialCount = ledger.filter(r=>r.status==='partial').length;
+  const liburCount = ledger.filter(r=>r.status==='libur').length;
+  const bengkelCount = ledger.filter(r=>r.status==='bengkel').length;
+
+  document.getElementById('lapDriverStats').innerHTML = `
+    <div class="stat"><div class="lbl">Total Setoran Rental Harian</div><div class="val good">${fmt(totalPaid)}</div></div>
+    <div class="stat"><div class="lbl">Hari Skip (Tanpa Alasan)</div><div class="val ${skipCount?'bad':''}">${skipCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Partial</div><div class="val ${partialCount?'warn':''}">${partialCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Libur</div><div class="val">${liburCount}</div></div>
+    <div class="stat"><div class="lbl">Hari Mobil Bengkel</div><div class="val">${bengkelCount}</div></div>
+  `;
+
+  renderReportBody('lapDriverReport', ledger, 'plat_nomor', 'Mobil');
+}
+
+// ---------- Hari Libur tab ----------
+function addDaysISO(dateStr, n){
+  const d = new Date(dateStr); d.setDate(d.getDate()+n);
+  return toISO(d);
+}
+
+function renderHariLibur(query){
+  if(!DATA) return;
+  const q = (query||'').toLowerCase().trim();
+  const all = (DATA.hari_off_raw||[]).map(([nama,tanggal,keterangan])=>({nama,tanggal,keterangan}));
+  const tISO = todayISO();
+
+  const todayOff = all.filter(r=>r.tanggal===tISO);
+  const next7 = [];
+  for(let i=1;i<=7;i++){
+    const d = addDaysISO(tISO, i);
+    all.filter(r=>r.tanggal===d).forEach(r=>next7.push(r));
+  }
+
+  const statsEl = document.getElementById('hlStats');
+  statsEl.innerHTML = `
+    <div class="stat"><div class="lbl">Libur Hari Ini</div><div class="val ${todayOff.length?'warn':'good'}">${todayOff.length}</div></div>
+    <div class="stat"><div class="lbl">Libur 7 Hari ke Depan</div><div class="val">${next7.length}</div></div>
+    <div class="stat"><div class="lbl">Total Riwayat Tercatat</div><div class="val good">${all.length}</div></div>
+  `;
+
+  const todayEl = document.getElementById('hlToday');
+  todayEl.innerHTML = todayOff.length===0
+    ? '<div class="note">Tidak ada driver yang libur hari ini.</div>'
+    : '<table><tr><th>Driver</th><th>Keterangan</th></tr>' +
+      todayOff.map(r=>`<tr><td class="name">${r.nama}</td><td>${r.keterangan||'-'}</td></tr>`).join('') +
+      '</table>';
+
+  const upEl = document.getElementById('hlUpcoming');
+  upEl.innerHTML = next7.length===0
+    ? '<div class="note">Tidak ada jadwal libur dalam 7 hari ke depan.</div>'
+    : '<table><tr><th>Tanggal</th><th>Driver</th><th>Keterangan</th></tr>' +
+      next7.sort((a,b)=>a.tanggal.localeCompare(b.tanggal)).map(r=>{
+        const dow = new Date(r.tanggal).toLocaleDateString('id-ID', {weekday:'short', day:'numeric', month:'short'});
+        return `<tr><td class="mono">${dow}</td><td class="name">${r.nama}</td><td>${r.keterangan||'-'}</td></tr>`;
+      }).join('') + '</table>';
+
+  const filtered = all.filter(r=>!q || r.nama.toLowerCase().includes(q));
+  filtered.sort((a,b)=>b.tanggal.localeCompare(a.tanggal));
+  const allEl = document.getElementById('hlAll');
+  allEl.innerHTML = filtered.length===0
+    ? '<div class="note">Tidak ada hasil.</div>'
+    : '<table><tr><th>Tanggal</th><th>Driver</th><th>Keterangan</th></tr>' +
+      filtered.map(r=>`<tr><td class="mono">${r.tanggal}</td><td class="name">${r.nama}</td><td>${r.keterangan||'-'}</td></tr>`).join('') +
+      '</table>';
+}
+document.getElementById('search-hari-libur').addEventListener('input', e=>renderHariLibur(e.target.value));
+
+document.getElementById('search-driver').addEventListener('input', e=>renderDriverTable(e.target.value));
+document.getElementById('search-mobil').addEventListener('input', e=>renderMobilTable(e.target.value));
+
+loadData();
+setInterval(loadData, REFRESH_MS);
 </script>
 </body>
 </html>
